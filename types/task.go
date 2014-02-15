@@ -66,3 +66,11 @@ func GetTask(idStr string) (*Task, error) {
 	task := taskDB[idStr]
 	return task, nil
 }
+
+func DeleteTask(idStr string) (string, error) {
+	// TODO: Proper error handling
+	// TODO: Replace with real DB
+	delete(taskDB, idStr)
+	respStr := fmt.Sprintf(`{"response": %q}`, "Task deleted successfully!")
+	return respStr, nil
+}
