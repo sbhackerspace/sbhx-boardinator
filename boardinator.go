@@ -166,7 +166,39 @@ func GetTask(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateTask(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("UpdateTask TODO\n"))
+	params := mux.Vars(r)
+	id := params["id"]
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		writeError(w, err)
+		return
+	}
+	defer r.Body.Close()
+
+	// Get the data to use
+	t := &types.Task{}
+	if err := json.Unmarshal(body, t); err != nil {
+		writeError(w, err)
+		return
+	}
+
+	// Get corresponding Task to update
+	task, err := types.UpdateTask(id, t)
+	if err != nil {
+		writeError(w, err)
+		return
+	}
+
+	// Marshal to JSON and return to user
+	jsonData, err := json.Marshal(task)
+	if err != nil {
+		writeError(w, err)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Write(jsonData)
 }
 
 // DeleteTask response to a DELETE request at the URL: "/tasks/{id:[0-9a-f-]+}"
