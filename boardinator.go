@@ -143,8 +143,25 @@ func CreateTask(w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonData)
 }
 
+//HandleFunc for "/tasks/{id:[0-9a-f-]+}"
 func GetTask(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("GetTask TODO\n"))
+	params := mux.Vars(r)
+	id := params["id"]
+
+	task, err := types.GetTask(id)
+	if err != nil {
+		writeError(w, err)
+		return
+	}
+
+	// Marshall Task to JSON
+	jsonData, err := json.Marshal(task)
+	if err != nil {
+		writeError(w, err)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Write(jsonData)
 }
 
 func UpdateTask(w http.ResponseWriter, r *http.Request) {
