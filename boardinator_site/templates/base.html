@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{% block title %}{% endblock %}</title>
+        <meta name="description" content="{% block meta_description %}{% endblock %}" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {# TODO: <link rel="shortcut icon" href="/media/images/favicon.ico" /> #}
+        {# TODO: <link rel="apple-touch-icon" href="/media/images/apple-touch-icon.png" /> #}
+
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/media/css/style.css" />
+
+        {% block extra_head %}{% endblock %}
+    </head>
+    <body class="body">
+
+        <div class="main" role="main">
+        <!--[if lt IE 8]>
+        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        {% block content %}{% endblock %}
+        </div>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+        {% block javascript %}{% endblock %}
+    </body>
+</html>
+
