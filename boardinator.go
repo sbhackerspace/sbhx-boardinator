@@ -143,7 +143,8 @@ func CreateTask(w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonData)
 }
 
-//HandleFunc for "/tasks/{id:[0-9a-f-]+}"
+// GetTask response to a GET request at the URL: "/tasks/{id:[0-9a-f-]+}"
+// It takes that id and responds with the corresponding Task
 func GetTask(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	id := params["id"]
