@@ -175,12 +175,12 @@ func DeleteTask(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	id := params["id"]
 
-	response, err := types.DeleteTask(id)
+	err := types.DeleteTask(id)
 	if err != nil {
 		writeError(w, err)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.Write([]byte(response))
+	fmt.Fprintf(w, `{"response": "Task deleted successfully!"}`)
 }

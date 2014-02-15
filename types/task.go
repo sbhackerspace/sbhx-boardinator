@@ -67,10 +67,22 @@ func GetTask(idStr string) (*Task, error) {
 	return task, nil
 }
 
-func DeleteTask(idStr string) (string, error) {
+func UpdateTask(idStr string, t *Task) (*Task, error) {
+	task := taskDB[idStr]
+
+	task.Name = t.Name
+	task.Description = t.Description
+	task.DueDate = t.DueDate
+	task.AssignedTo = t.AssignedTo
+	task.Parent = t.Parent
+	task.ModifiedAt = time.Now()
+
+	return task, nil
+}
+
+func DeleteTask(idStr string) (error) {
 	// TODO: Proper error handling
 	// TODO: Replace with real DB
 	delete(taskDB, idStr)
-	respStr := fmt.Sprintf(`{"response": %q}`, "Task deleted successfully!")
-	return respStr, nil
+	return nil
 }
