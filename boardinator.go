@@ -169,6 +169,18 @@ func UpdateTask(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("UpdateTask TODO\n"))
 }
 
+// DeleteTask response to a DELETE request at the URL: "/tasks/{id:[0-9a-f-]+}"
+// It takes that id and deletes the corresponding Task
 func DeleteTask(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("DeleteTask TODO\n"))
+	params := mux.Vars(r)
+	id := params["id"]
+
+	response, err := types.DeleteTask(id)
+	if err != nil {
+		writeError(w, err)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Write([]byte(response))
 }
