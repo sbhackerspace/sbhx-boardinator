@@ -59,3 +59,10 @@ func AllTasks() ([]*Task, error) {
 	}
 	return tasks, nil
 }
+
+func GetTask(idStr string) (*Task, error) {
+	// TODO: Proper error handling
+	// TODO: Replace with real DB
+	task := taskDB[idStr]
+	return task, nil
+}
