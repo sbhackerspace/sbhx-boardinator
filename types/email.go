@@ -25,7 +25,7 @@ type Email struct {
 
 func (e *Email) Save() error {
 	if e == nil {
-		return fmt.Errorf("Cannot save nil *Task to DB!\n")
+		return fmt.Errorf("Cannot save nil *Email to DB!\n")
 	}
 	// Populate fields
 	id, err := uuid.NewV4() // TODO: Replace with channel read
