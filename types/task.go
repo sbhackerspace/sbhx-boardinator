@@ -3,10 +3,15 @@
 package types
 
 import (
+	"errors"
 	"fmt"
 	uuid "github.com/nu7hatch/gouuid"
 	"log"
 	"time"
+)
+
+var (
+	ErrTaskNotFound = errors.New("Task not found")
 )
 
 // TODO: Replace with Postgres DB
@@ -63,7 +68,10 @@ func AllTasks() ([]*Task, error) {
 func GetTask(idStr string) (*Task, error) {
 	// TODO: Proper error handling
 	// TODO: Replace with real DB
-	task := taskDB[idStr]
+	task, found := taskDB[idStr]
+	if !found {
+		return nil, ErrTaskNotFound
+	}
 	return task, nil
 }
 

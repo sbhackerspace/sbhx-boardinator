@@ -156,6 +156,10 @@ func GetTask(w http.ResponseWriter, r *http.Request) {
 
 	task, err := types.GetTask(id)
 	if err != nil {
+		if err == types.ErrTaskNotFound {
+			writeError(w, err, 404)
+			return
+		}
 		writeError(w, err, 500)
 		return
 	}
