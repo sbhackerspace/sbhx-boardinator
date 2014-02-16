@@ -49,9 +49,9 @@ func (e *Email) populateNew() {
 	e.ModifiedAt = now
 }
 
-
-func (e *Email) Send() {
+func (e *Email) Send() error {
 	//TODO
 	log.Printf("Sent!")
-	return
+	log.Printf("(*Email).Send: TODO\n")
+	return nil
 }
