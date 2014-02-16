@@ -74,9 +74,9 @@ func SimpleHTTPServer(handler http.Handler, host string) *http.Server {
 	return &server
 }
 
-func writeError(w http.ResponseWriter, err error) {
+func writeError(w http.ResponseWriter, err error, statusCode int) {
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	http.Error(w, err.Error(), 500)
+	http.Error(w, err.Error(), statusCode)
 }
 
 //
@@ -100,13 +100,13 @@ func GetTasks(w http.ResponseWriter, r *http.Request) {
 	// Grab all Tasks from DB
 	tasks, err := types.AllTasks()
 	if err != nil {
-		writeError(w, err)
+		writeError(w, err, 500)
 		return
 	}
 	// Marshall all Tasks to JSON
 	jsonData, err := json.Marshal(tasks)
 	if err != nil {
-		writeError(w, err)
+		writeError(w, err, 500)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -118,27 +118,27 @@ func GetTasks(w http.ResponseWriter, r *http.Request) {
 func CreateTask(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		writeError(w, err)
+		writeError(w, err, 500)
 		return
 	}
 	defer r.Body.Close()
 
 	t := &types.Task{}
 	if err := json.Unmarshal(body, t); err != nil {
-		writeError(w, err)
+		writeError(w, err, 500)
 		return
 	}
 
 	// Save to DB
 	if err = t.Save(); err != nil {
-		writeError(w, err)
+		writeError(w, err, 500)
 		return
 	}
 
 	// Marshal to JSON and return to user
 	jsonData, err := json.Marshal(t)
 	if err != nil {
-		writeError(w, err)
+		writeError(w, err, 500)
 		return
 	}
 
@@ -156,14 +156,14 @@ func GetTask(w http.ResponseWriter, r *http.Request) {
 
 	task, err := types.GetTask(id)
 	if err != nil {
-		writeError(w, err)
+		writeError(w, err, 500)
 		return
 	}
 
 	// Marshall Task to JSON
 	jsonData, err := json.Marshal(task)
 	if err != nil {
-		writeError(w, err)
+		writeError(w, err, 500)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -176,7 +176,7 @@ func UpdateTask(w http.ResponseWriter, r *http.Request) {
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		writeError(w, err)
+		writeError(w, err, 500)
 		return
 	}
 	defer r.Body.Close()
@@ -184,21 +184,21 @@ func UpdateTask(w http.ResponseWriter, r *http.Request) {
 	// Get the data to use
 	t := &types.Task{}
 	if err := json.Unmarshal(body, t); err != nil {
-		writeError(w, err)
+		writeError(w, err, 500)
 		return
 	}
 
 	// Get corresponding Task to update
 	task, err := types.UpdateTask(id, t)
 	if err != nil {
-		writeError(w, err)
+		writeError(w, err, 500)
 		return
 	}
 
 	// Marshal to JSON and return to user
 	jsonData, err := json.Marshal(task)
 	if err != nil {
-		writeError(w, err)
+		writeError(w, err, 500)
 		return
 	}
 
@@ -215,7 +215,7 @@ func DeleteTask(w http.ResponseWriter, r *http.Request) {
 
 	err := types.DeleteTask(id)
 	if err != nil {
-		writeError(w, err)
+		writeError(w, err, 500)
 		return
 	}
 
@@ -227,19 +227,19 @@ func DeleteTask(w http.ResponseWriter, r *http.Request) {
 func SendEmail(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		writeError(w, err)
+		writeError(w, err, 500)
 		return
 	}
 	defer r.Body.Close()
 
 	e := &types.Email{}
 	if err = json.Unmarshal(body, e); err != nil {
-		writeError(w, err)
+		writeError(w, err, 500)
 		return
 	}
 
 	if err = e.Save(); err != nil {
-		writeError(w, err)
+		writeError(w, err, 500)
 		return
 	}
 
