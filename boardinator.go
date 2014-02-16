@@ -37,18 +37,18 @@ var (
 
 func init() {
 	// Tasks
-	router.HandleFunc("/", GetIndex).Methods("GET")
-	router.HandleFunc("/tasks", GetTasks).Methods("GET")
+	router.HandleFunc("/api/", GetIndex).Methods("GET")
+	router.HandleFunc("/api/tasks", GetTasks).Methods("GET")
 	// Let's keep it RESTful, folks
-	router.HandleFunc("/tasks/{id:[0-9a-f-]+}", GetTask).Methods("GET")
-	router.HandleFunc("/tasks/{id:[0-9a-f-]+}", UpdateTask).Methods("PUT")
-	router.HandleFunc("/tasks/{id:[0-9a-f-]+}", DeleteTask).Methods("DELETE")
-	router.HandleFunc("/tasks", CreateTask).Methods("POST")
+	router.HandleFunc("/api/tasks/{id:[0-9a-f-]+}", GetTask).Methods("GET")
+	router.HandleFunc("/api/tasks/{id:[0-9a-f-]+}", UpdateTask).Methods("PUT")
+	router.HandleFunc("/api/tasks/{id:[0-9a-f-]+}", DeleteTask).Methods("DELETE")
+	router.HandleFunc("/api/tasks", CreateTask).Methods("POST")
 
 	// Email Board
-	router.HandleFunc("/email", SendEmail).Methods("POST")
+	router.HandleFunc("/api/email", SendEmail).Methods("POST")
 
-	http.Handle("/", router)
+	http.Handle("/api/", router)
 }
 
 func main() {
@@ -91,7 +91,7 @@ func GetIndex(w http.ResponseWriter, r *http.Request) {
 
 	// which is also equivalent to (notice string interpolation)...
 	appName := "Boardinator"
-	mainURL := "/tasks"
+	mainURL := "/api/tasks"
 	fmt.Fprintf(w, "Welcome to %s! Check out %s\n", appName, mainURL)
 }
 
@@ -147,8 +147,9 @@ func CreateTask(w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonData)
 }
 
-// GetTask response to a GET request at the URL: "/tasks/{id:[0-9a-f-]+}"
-// It takes that id and responds with the corresponding Task
+// GetTask response to a GET request at the URL:
+// "/api/tasks/{id:[0-9a-f-]+}" It takes that id and responds with the
+// corresponding Task
 func GetTask(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	id := params["id"]
@@ -205,8 +206,9 @@ func UpdateTask(w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonData)
 }
 
-// DeleteTask response to a DELETE request at the URL: "/tasks/{id:[0-9a-f-]+}"
-// It takes that id and deletes the corresponding Task
+// DeleteTask response to a DELETE request at the URL:
+// "/api/tasks/{id:[0-9a-f-]+}" It takes that id and deletes the
+// corresponding Task
 func DeleteTask(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	id := params["id"]
