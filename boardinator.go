@@ -36,13 +36,17 @@ var (
 )
 
 func init() {
-	// Let's keep it RESTful, folks
+	// Tasks
 	router.HandleFunc("/", GetIndex).Methods("GET")
 	router.HandleFunc("/tasks", GetTasks).Methods("GET")
+	// Let's keep it RESTful, folks
 	router.HandleFunc("/tasks/{id:[0-9a-f-]+}", GetTask).Methods("GET")
 	router.HandleFunc("/tasks/{id:[0-9a-f-]+}", UpdateTask).Methods("PUT")
 	router.HandleFunc("/tasks/{id:[0-9a-f-]+}", DeleteTask).Methods("DELETE")
 	router.HandleFunc("/tasks", CreateTask).Methods("POST")
+
+	// Email Board
+	router.HandleFunc("/email", SendEmail).Methods("POST")
 
 	http.Handle("/", router)
 }
@@ -215,4 +219,30 @@ func DeleteTask(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	fmt.Fprintf(w, `{"response": "Task deleted successfully!"}`)
+}
+
+// SendEmail POST Handler
+func SendEmail(w http.ResponseWriter, r *http.Request) {
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		writeError(w, err)
+		return
+	}
+	defer r.Body.Close()
+
+	e := &types.Email{}
+	if err := json.Unmarshal(body, e); err != nil {
+		writeError(w, err)
+		return
+	}
+
+	if err := e.Save(); err != nil {
+		writeError(w, err)
+		return
+	}
+
+	go e.Send()
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	fmt.Fprintf(w, `{"response": "Email sent successfully!"}`)
 }
