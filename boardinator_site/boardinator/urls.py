@@ -8,10 +8,6 @@ admin.autodiscover()
 urlpatterns = patterns('',
     ## App URL include
     url(r'^', include('boardinator_app.appurls')),
-
-    ## Static Links
-    #url(r'^', TemplateView.as_view(template_name='home.html'), name='home'),
-
 )
 
 if settings.DEBUG:
