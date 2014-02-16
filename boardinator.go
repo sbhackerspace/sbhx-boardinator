@@ -231,12 +231,12 @@ func SendEmail(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	e := &types.Email{}
-	if err := json.Unmarshal(body, e); err != nil {
+	if err = json.Unmarshal(body, e); err != nil {
 		writeError(w, err)
 		return
 	}
 
-	if err := e.Save(); err != nil {
+	if err = e.Save(); err != nil {
 		writeError(w, err)
 		return
 	}
