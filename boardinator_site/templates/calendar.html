@@ -58,8 +58,12 @@
 {% block javascript %}
 <script type="text/javascript">
       (function() {
-        var cal, calendarDate, d, m, y;
-      
+        var cal,
+            calendarDate = new Date(),
+            d = calendarDate.getDate(),
+            m = calendarDate.getMonth(),
+            y = calendarDate.getFullYear();
+
         this.setDraggableEvents = function() {
           return $("#events .external-event").each(function() {
             var eventObject;
@@ -74,17 +78,9 @@
             });
           });
         };
-      
+
         setDraggableEvents();
-      
-        calendarDate = new Date();
-      
-        d = calendarDate.getDate();
-      
-        m = calendarDate.getMonth();
-      
-        y = calendarDate.getFullYear();
-      
+
         cal = $(".full-calendar").fullCalendar({
           header: {
             center: "title",
@@ -205,15 +201,12 @@
             }
           ]
         });
-      
-      }).call(this);
-	</script>
 
-    <script type="text/javascript">     
+      }).call(this);
+
       $("#new-event").live('submit', function(e) {
-        var value;    
         e.preventDefault();            
-        value = $("#new-event-input").val();
+        var value = $("#new-event-input").val();
         if (value.length > 0) {
           $("#events .box-content").prepend("<div class='label label-danger external-event'>" + value + "</div>");
           $("#new-event-input").val("");
