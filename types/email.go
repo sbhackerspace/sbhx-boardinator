@@ -37,7 +37,7 @@ type Email struct {
 	ModifiedAt time.Time `json:"modified_at"`
 }
 
-func HandleEmailError(e *Email, err error) {
+func handleEmailError(e *Email, err error) {
 	log.Printf("Error occurred with email: %v", err.Error())
 	e.Status = FAILED
 }
@@ -46,7 +46,7 @@ func (e *Email) SaveAndSend() {
 	// Save
 	go func() {
 		if err := e.Save(); err != nil {
-			HandleEmailError(e, err)
+			handleEmailError(e, err)
 		}
 	}()
 	// Send
@@ -74,7 +74,7 @@ func StartEmailQueue() {
 
 				err := e.Send()
 				if err != nil {
-					HandleEmailError(e, err)
+					handleEmailError(e, err)
 					return
 				}
 				e.Status = SUCCESS
