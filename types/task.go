@@ -21,13 +21,13 @@ type Task struct {
 	Id          string    `json:"id"`
 	Name        string    `json:"name"`
 	Description string    `json:"description"`
-	DueDate     time.Time `json:"due_date"`
+	DueDate     *time.Time `json:"due_date"`
 	CreatedBy   *User     `json:"created_by"`
 	AssignedTo  *User     `json:"assigned_to"`
 	Parent      *Task     `json:"parent"`
 
-	CreatedAt  time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	CreatedAt  *time.Time `json:"created_at"`
+	ModifiedAt *time.Time `json:"modified_at"`
 }
 
 func (t *Task) Save() error {
@@ -52,8 +52,8 @@ func (t *Task) Save() error {
 
 func (t *Task) populateNew() {
 	now := time.Now()
-	t.CreatedAt = now
-	t.ModifiedAt = now
+	t.CreatedAt = &now
+	t.ModifiedAt = &now
 }
 
 // AllTasks retrieves all Tasks from the DB and returns a slice of 'em
@@ -77,13 +77,14 @@ func GetTask(idStr string) (*Task, error) {
 
 func UpdateTask(idStr string, t *Task) (*Task, error) {
 	task := taskDB[idStr]
+	now := time.Now()
 
 	task.Name = t.Name
 	task.Description = t.Description
 	task.DueDate = t.DueDate
 	task.AssignedTo = t.AssignedTo
 	task.Parent = t.Parent
-	task.ModifiedAt = time.Now()
+	task.ModifiedAt = &now
 
 	return task, nil
 }
