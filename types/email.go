@@ -15,13 +15,13 @@ var (
 	EmailQueue = make(chan *Email)
 )
 
-type SentStatus string
+type EmailStatus string
 
 const (
-	QUEUED  SentStatus = "queued"
-	SENDING SentStatus = "sending"
-	SUCCESS SentStatus = "success"
-	FAILED  SentStatus = "failed"
+	QUEUED  EmailStatus = "queued"
+	SENDING EmailStatus = "sending"
+	SUCCESS EmailStatus = "success"
+	FAILED  EmailStatus = "failed"
 )
 
 type Email struct {
@@ -31,7 +31,7 @@ type Email struct {
 	Subject string `json:"name"`
 	Body    string `json:"body"`
 
-	Status SentStatus `json:"status"`
+	Status EmailStatus `json:"status"`
 
 	CreatedAt  time.Time `json:"created_at"`
 	ModifiedAt time.Time `json:"modified_at"`
