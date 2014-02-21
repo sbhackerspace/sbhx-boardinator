@@ -11,16 +11,16 @@ import (
 
 // TODO: Replace with Postgres DB
 var (
-	emailDB = map[string]*Email{}
+	emailDB    = map[string]*Email{}
 	EmailQueue = make(chan *Email)
 )
 
 type Email struct {
-	Id          string    `json:"id"`
-	To			string    `json:"to"`
-	From		string    `json:"from"`
-	Subject     string    `json:"name"`
-	Body		string    `json:"body"`
+	Id      string `json:"id"`
+	To      string `json:"to"`
+	From    string `json:"from"`
+	Subject string `json:"name"`
+	Body    string `json:"body"`
 
 	CreatedAt  time.Time `json:"created_at"`
 	ModifiedAt time.Time `json:"modified_at"`
