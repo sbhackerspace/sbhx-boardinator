@@ -61,6 +61,9 @@ func main() {
 	if err := server.ListenAndServe(); err != nil {
 		log.Printf("HTTP listen failed: %v\n", err)
 	}
+
+	// Start the Email Queue
+	types.StartEmailQueue()
 }
 
 func SimpleHTTPServer(handler http.Handler, host string) *http.Server {
@@ -242,13 +245,15 @@ func SendEmail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = e.Save(); err != nil {
-		writeError(w, err, 500)
-		return
-	}
+	go e.SaveAndSend()
 
-	go e.Send()
+	// TODO
+	// How about we return to them the saved *Email (as JSON) so
+	// they have the ID and as to return immediately. We can then
+	// save a corresponding EmailStatus object (see #19) then allow
+	// them to query the server to check the status (perhaps via
+	// GET requests to /email/{id}/status).
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	fmt.Fprintf(w, `{"response": "Email sent successfully!"}`)
+	fmt.Fprintf(w, `{"response": "Email added to the queue."}`)
 }
