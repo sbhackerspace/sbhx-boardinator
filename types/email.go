@@ -10,7 +10,10 @@ import (
 )
 
 // TODO: Replace with Postgres DB
-var emailDB = map[string]*Email{}
+var (
+	emailDB = map[string]*Email{}
+	EmailQueue = make(chan *Email)
+)
 
 type Email struct {
 	Id          string    `json:"id"`
@@ -21,6 +24,62 @@ type Email struct {
 
 	CreatedAt  time.Time `json:"created_at"`
 	ModifiedAt time.Time `json:"modified_at"`
+}
+
+type SentStatus string
+
+const (
+	QUEUED  SentStatus = "queued"
+	SENDING SentStatus = "sending"
+	SUCCESS SentStatus = "success"
+	FAILED  SentStatus = "failed"
+)
+
+type EmailStatus struct {
+	Email   *Email
+	EmailId string
+	Status  SentStatus
+}
+
+func (e *Email) SaveAndSend() {
+	// Save
+	go func() {
+		if err := e.Save(); err != nil {
+			//TODO: Handle error
+		}
+	}()
+	// Send
+	go func() {
+		EmailQueue <- e
+	}()
+}
+
+func StartEmailQueue() {
+	var semaphore = make(chan bool, 10) // Can only send 10 at once
+
+	go func() {
+		for {
+			email := <-EmailQueue
+			// Spawn goroutine immediately
+			go func(e *Email) {
+				// Will only block if 10 emails are already being sent.
+				semaphore <- true
+				defer func() {
+					// Drain value from channel to make room
+					// for another email sender
+					<-semaphore
+				}()
+
+				err := e.Send()
+				if err != nil {
+					// FAILED
+					//TODO: Handle error
+					return
+				}
+				// SUCCESS
+			}(email)
+		}
+	}()
 }
 
 func (e *Email) Save() error {
