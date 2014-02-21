@@ -33,8 +33,8 @@ type Email struct {
 
 	Status EmailStatus `json:"status"`
 
-	CreatedAt  time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	CreatedAt  *time.Time `json:"created_at"`
+	ModifiedAt *time.Time `json:"modified_at"`
 }
 
 func handleEmailError(e *Email, err error) {
@@ -105,8 +105,8 @@ func (e *Email) Save() error {
 
 func (e *Email) populateNew() {
 	now := time.Now()
-	e.CreatedAt = now
-	e.ModifiedAt = now
+	e.CreatedAt = &now
+	e.ModifiedAt = &now
 }
 
 //TODO
