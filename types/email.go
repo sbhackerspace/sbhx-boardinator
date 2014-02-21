@@ -61,6 +61,7 @@ func StartEmailQueue() {
 	go func() {
 		for {
 			email := <-EmailQueue
+			email.Status = QUEUED
 			// Spawn goroutine immediately
 			go func(e *Email) {
 				// Will only block if 10 emails are already being sent.
@@ -73,11 +74,10 @@ func StartEmailQueue() {
 
 				err := e.Send()
 				if err != nil {
-					// FAILED
-					//TODO: Handle error
+					HandleEmailError(e, err)
 					return
 				}
-				// SUCCESS
+				e.Status = SUCCESS
 			}(email)
 		}
 	}()
@@ -90,7 +90,7 @@ func (e *Email) Save() error {
 	// Populate fields
 	id, err := uuid.NewV4() // TODO: Replace with channel read
 	if err != nil {
-		return fmt.Errorf("Unable to create new id: %v\n", err)
+		return err
 	}
 	idStr := id.String()
 	e.Id = idStr
@@ -110,8 +110,6 @@ func (e *Email) populateNew() {
 }
 
 func (e *Email) Send() error {
-	//TODO
-	log.Printf("Sent!")
-	log.Printf("(*Email).Send: TODO\n")
+	e.Status = SENDING
 	return nil
 }
