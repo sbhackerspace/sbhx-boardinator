@@ -109,7 +109,9 @@ func (e *Email) populateNew() {
 	e.ModifiedAt = now
 }
 
+//TODO
 func (e *Email) Send() error {
 	e.Status = SENDING
+	log.Printf("Email sent: %+v\n", e)
 	return nil
 }
