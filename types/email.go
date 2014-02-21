@@ -15,17 +15,6 @@ var (
 	EmailQueue = make(chan *Email)
 )
 
-type Email struct {
-	Id      string `json:"id"`
-	To      string `json:"to"`
-	From    string `json:"from"`
-	Subject string `json:"name"`
-	Body    string `json:"body"`
-
-	CreatedAt  time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
-}
-
 type SentStatus string
 
 const (
@@ -35,17 +24,29 @@ const (
 	FAILED  SentStatus = "failed"
 )
 
-type EmailStatus struct {
-	Email   *Email
-	EmailId string
-	Status  SentStatus
+type Email struct {
+	Id      string `json:"id"`
+	To      string `json:"to"`
+	From    string `json:"from"`
+	Subject string `json:"name"`
+	Body    string `json:"body"`
+
+	Status SentStatus `json:"status"`
+
+	CreatedAt  time.Time `json:"created_at"`
+	ModifiedAt time.Time `json:"modified_at"`
+}
+
+func HandleEmailError(e *Email, err error) {
+	log.Printf("Error occurred with email: %v", err.Error())
+	e.Status = FAILED
 }
 
 func (e *Email) SaveAndSend() {
 	// Save
 	go func() {
 		if err := e.Save(); err != nil {
-			//TODO: Handle error
+			HandleEmailError(e, err)
 		}
 	}()
 	// Send
