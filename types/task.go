@@ -88,7 +88,7 @@ func UpdateTask(idStr string, t *Task) (*Task, error) {
 	return task, nil
 }
 
-func DeleteTask(idStr string) (error) {
+func DeleteTask(idStr string) error {
 	// TODO: Proper error handling
 	// TODO: Replace with real DB
 	delete(taskDB, idStr)
