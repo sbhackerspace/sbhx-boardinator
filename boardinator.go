@@ -55,15 +55,15 @@ func main() {
 	// Use all CPU cores
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
+	// Start the Email Queue
+	go types.StartEmailQueue()
+
 	// Start HTTP server
 	server := SimpleHTTPServer(router, *Domain+":"+Port)
 	log.Printf("HTTP server trying to listen on %v...\n", server.Addr)
 	if err := server.ListenAndServe(); err != nil {
 		log.Printf("HTTP listen failed: %v\n", err)
 	}
-
-	// Start the Email Queue
-	types.StartEmailQueue()
 }
 
 func SimpleHTTPServer(handler http.Handler, host string) *http.Server {
