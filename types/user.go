@@ -14,6 +14,6 @@ type User struct {
 	IsBoardMember bool     `json:"is_board_member"`
 	IsAdmin       bool     `json:"is_admin"`
 
-	CreatedAt  time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	CreatedAt  *time.Time `json:"created_at"`
+	ModifiedAt *time.Time `json:"modified_at"`
 }
