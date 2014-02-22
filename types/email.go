@@ -90,7 +90,7 @@ func (e *Email) Save() error {
 	// Populate fields
 	id, err := uuid.NewV4() // TODO: Replace with channel read
 	if err != nil {
-		return err
+		return fmt.Errorf("Unable to create new id: %v\n", err)
 	}
 	idStr := id.String()
 	e.Id = idStr
