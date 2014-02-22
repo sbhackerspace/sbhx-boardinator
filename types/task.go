@@ -18,13 +18,13 @@ var (
 var taskDB = map[string]*Task{}
 
 type Task struct {
-	Id          string    `json:"id"`
-	Name        string    `json:"name"`
-	Description string    `json:"description"`
+	Id          string     `json:"id"`
+	Name        string     `json:"name"`
+	Description string     `json:"description"`
 	DueDate     *time.Time `json:"due_date"`
-	CreatedBy   *User     `json:"created_by"`
-	AssignedTo  *User     `json:"assigned_to"`
-	Parent      *Task     `json:"parent"`
+	CreatedBy   *User      `json:"created_by"`
+	AssignedTo  *User      `json:"assigned_to"`
+	Parent      *Task      `json:"parent"`
 
 	CreatedAt  *time.Time `json:"created_at"`
 	ModifiedAt *time.Time `json:"modified_at"`
