@@ -109,6 +109,7 @@ WSGI_APPLICATION = 'boardinator.wsgi.application'
 
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_PATH, 'templates/'),
+    os.path.join(PROJECT_PATH, 'media/ui/'),
 )
 
 # Uncomment any apps you want to use. We will not

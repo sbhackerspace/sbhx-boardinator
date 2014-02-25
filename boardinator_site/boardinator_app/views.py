@@ -17,6 +17,7 @@ def task(request):
 def calendar(request):
 		return render(request, "calendar.html", locals())
 
-
+def ang(request):
+	return render(request, "app/index.html")
 		
 
