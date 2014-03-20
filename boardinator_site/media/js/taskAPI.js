@@ -5,9 +5,6 @@ var Task = function(json) {
     var description = json.description;
     console.log(name);  
     console.log(description);
-
-    
-
 }
 
 var TaskApI = new function() {
