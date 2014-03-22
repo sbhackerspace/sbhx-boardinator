@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}Boardinator Dashboard Page{% endblock %}
+{% block meta_description %}{% endblock %}
+
+{% block extra_head %}{% endblock %}
+
+{% block initscript %}
+<script type="text/javascript">
+	
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="col-lg-12">
+		<h1>Dashboard <small>Overview</small></h1>
+			<ol class="breadcrumb">	
+			  <li class="active"><i class="fa fa-dashboard"></i> user.firstName  Dashboard</li>
+			</ol>           
+	</div>
+</div>
+
+
+<div class="row">
+   <!-- New Task -->
+  <div class="col-lg-4">
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-xs-6">
+            <i class="fa fa-comments fa-5x"></i>
+          </div>
+          <div class="col-xs-6 text-right">
+            <p class="announcement-heading">36</p>
+            <p class="announcement-text">New Tasks</p>
+          </div>
+        </div>
+      </div>
+      <a href="#">
+        <div class="panel-footer announcement-bottom">
+          <div class="row">
+            <div class="col-xs-6">
+              New Tasks
+            </div>
+            <div class="col-xs-6 text-right">
+              <i class="fa fa-arrow-circle-right"></i>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Work in Progress -->
+  <div class="col-lg-4">
+    <div class="panel panel-danger">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-xs-6">
+            <i class="fa fa-tasks fa-5x"></i>	
+          </div>
+          <div class="col-xs-6 text-right">
+            <p class="announcement-heading">20</p>
+            <p class="announcement-text">Task in Progress</p>
+          </div>
+        </div>
+      </div>
+      <a href="#">
+        <div class="panel-footer announcement-bottom">
+          <div class="row">
+            <div class="col-xs-9">
+              Task in Progress
+            </div>
+            <div class="col-xs-3 text-right">
+              <i class="fa fa-arrow-circle-right"></i>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+    <!-- Completed Task -->
+  <div class="col-lg-4">
+    <div class="panel panel-warning">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-xs-6">
+            <i class="fa fa-check fa-5x"></i>
+          </div>
+          <div class="col-xs-6 text-right">
+            <p class="announcement-heading">12</p>
+            <p class="announcement-text">Completed Tasks</p>
+          </div>
+        </div>
+      </div>
+      <a href="#">
+        <div class="panel-footer announcement-bottom">
+          <div class="row">
+            <div class="col-xs-6">
+              Completed Tasks
+            </div>
+            <div class="col-xs-6 text-right">
+              <i class="fa fa-arrow-circle-right"></i>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block javascript %}{% endblock %}
