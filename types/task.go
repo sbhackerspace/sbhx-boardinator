@@ -164,13 +164,23 @@ func UpdateTask(idStr string, t *Task) (*Task, error) {
 
 	err = task.Update()
 	if err != nil {
-		return nil, fmt.Errorf("Error saving Task: %v", err)
+		return nil, fmt.Errorf("Error updating Task: %v", err)
 	}
 
 	return task, nil
 }
 
 func DeleteTask(idStr string) error {
-	_, err := db.Query(`DELETE FROM tasks WHERE id = $1`, idStr)
-	return err
+	result, err := db.Exec(`DELETE FROM tasks WHERE id = $1`, idStr)
+	if err != nil {
+		return fmt.Errorf("Error deleting Task: %v", err)
+	}
+	affected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("Error getting RowsAffected: %v", err)
+	}
+	if affected == 0 {
+		return fmt.Errorf("Task not found")
+	}
+	return nil
 }
