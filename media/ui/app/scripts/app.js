@@ -16,6 +16,10 @@ angular.module('uiApp', [
         templateUrl: '/media/ui/app/views/tasks.html',
         controller: 'TasksCtrl'
       })
+      .when('/calendar', {
+        templateUrl: '/media/ui/app/views/calendar.html',
+        controller: 'CalendarCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
