@@ -15,5 +15,5 @@ assignee, emails the Board when a task is not completed on time, etc).
 ### Create New Task
 
 ```
-curl -X POST -d '{"name": "Test Task", "due_date": "2014-03-22T19:30:00-07:00", "username": "Steve", "description": "Finish API Task creation"}' http://localhost:6060/api/tasks
+curl -X POST -d '{"name": "Test Task", "due_date": "2014-04-20T09:30:00-04:00", "assignee": "elimisteve@gmail.com", "description": "Finish API Task creation"}' http://localhost:6060/api/tasks
 ```
