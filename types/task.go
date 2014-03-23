@@ -179,7 +179,7 @@ func DeleteTask(idStr string) error {
 		return fmt.Errorf("Error getting RowsAffected: %v", err)
 	}
 	if affected == 0 {
-		return fmt.Errorf("Task not found")
+		return ErrTaskNotFound
 	}
 	return nil
 }
