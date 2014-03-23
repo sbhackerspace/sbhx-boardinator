@@ -20,12 +20,12 @@ almost identical for newer versions.
 In command line shell (probably Bash):
 
 ```
-$ sudo su postgres
-$ createuser boardinator
+sudo su postgres
+createuser boardinator  # answer `n` to each of the 3 questions
 ```
 
-Answer `n` to each of the 3 questions. Newer versions of Postgres
-require `createuser --interactie boardinator`.
+Newer versions of Postgres require `createuser --interactive
+boardinator` instead.
 
 In Postgres shell (transition with `psql` command):
 
