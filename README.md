@@ -10,7 +10,7 @@ things with that information (e.g., sends reminder emails to the
 assignee, emails the Board when a task is not completed on time, etc).
 
 
-## Tutorial
+## Quickstart
 
 ### Postres Setup
 
@@ -52,3 +52,22 @@ curl -X POST -d \
 '{"name": "Boardinator MVP", "due_date": "2014-03-22T17:30:00-07:00", "assignee": "elimisteve@gmail.com", "description": "Finish API Task creation"}' \
 http://localhost:6060/api/tasks
 ```
+
+
+### Update Task
+
+`curl -X PUT -d '{"completed":true}' http://localhost:6060/api/tasks/49ebc56f-dfdb-4a11-4d9c-d83d488f987a`
+
+
+### Get Task
+
+`curl -X GET http://localhost:6060/api/tasks/49ebc56f-dfdb-4a11-4d9c-d83d488f987a`
+
+or simply
+
+`curl http://localhost:6060/api/tasks/49ebc56f-dfdb-4a11-4d9c-d83d488f987a`
+
+
+### Delete Task
+
+`curl -X DELETE http://localhost:6060/api/tasks/49ebc56f-dfdb-4a11-4d9c-d83d488f987a`
