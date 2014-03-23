@@ -8,6 +8,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/gorilla/mux"
+	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -36,6 +37,9 @@ var (
 
 func init() {
 	router.HandleFunc("/", GetIndex).Methods("GET")
+
+	// TEMPORARY; We want an AngularJS CRUD UI instead
+	router.HandleFunc("/tasks", ShowTasks).Methods("GET")
 
 	// Tasks
 	router.HandleFunc("/api/tasks", GetTasks).Methods("GET")
@@ -89,10 +93,39 @@ func GetIndex(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/tasks", 301)
 }
 
-	// which is also equivalent to (notice string interpolation)...
-	appName := "Boardinator"
-	mainURL := "/api/tasks"
-	fmt.Fprintf(w, "Welcome to %s! Check out %s\n", appName, mainURL)
+var showTasksTmpl = template.Must(template.New("name").Parse(`
+<html>
+<title>Tasks</title>
+<body>
+<h2>Tasks</h2>
+<div class="tasks">
+  {{range .}}
+  <p>
+    <strong>Title</strong>:       {{.Name}}<br>
+    <strong>Description</strong>: {{.Description}}<br>
+    <strong>Assignee</strong>:    {{.Assignee}}<br>
+    <strong>Due Date</strong>:    {{.DueDate}}<br>
+    <strong>Id</strong>:          {{.Id}}<br>
+  </p>
+  {{end}}
+</div>
+</body>
+</html>
+`))
+
+func ShowTasks(w http.ResponseWriter, r *http.Request) {
+	// Grab all Tasks from DB
+	tasks, err := types.AllTasks()
+	if err != nil {
+		writeError(w, err, 500)
+		return
+	}
+	// Render template with Tasks included
+	err = showTasksTmpl.Execute(w, tasks)
+	if err != nil {
+		writeError(w, err, 500)
+		return
+	}
 }
 
 // GetTasks retrieves all Tasks and returns them as JSON
