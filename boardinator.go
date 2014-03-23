@@ -102,9 +102,15 @@ var showTasksTmpl = template.Must(template.New("name").Parse(`
   {{range .}}
   <p>
     <strong>Title</strong>:       {{.Name}}<br>
+    {{if .Description}}
     <strong>Description</strong>: {{.Description}}<br>
+    {{end}}
     <strong>Assignee</strong>:    {{.Assignee}}<br>
     <strong>Due Date</strong>:    {{.DueDate}}<br>
+    <strong>Completed?</strong>:  {{.Completed}}<br>
+    {{if and .Completed .CompletionDate}}
+    <strong>Completion Date</strong>:  {{.CompletionDate}}<br>
+    {{end}}
     <strong>Id</strong>:          {{.Id}}<br>
   </p>
   {{end}}

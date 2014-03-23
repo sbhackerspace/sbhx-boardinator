@@ -23,6 +23,11 @@ type Task struct {
 	// FIXME: Use (*AssignedTo).{FirstName,LastName,Email} instead
 	Assignee string `json:"assignee"`
 
+	Completed      bool       `json:"completed"`
+	CompletionDate *time.Time `json:"completion_date"`
+
+	// TODO: Use these fields
+
 	CreatedBy   *User      `json:"created_by"`
 	AssignedTo  *User      `json:"assigned_to"`
 	Parent      *Task      `json:"parent"`
@@ -44,8 +49,8 @@ func (t *Task) Save() error {
 	t.Id = idStr
 	t.addTimestamps()
 
-	_, err = db.Query(`INSERT INTO tasks (Id, Name, Description, DueDate, Assignee)
-        VALUES ($1, $2, $3, $4, $5)`, t.insertFields()...)
+	_, err = db.Query(`INSERT INTO tasks (Id, Name, Description, DueDate, Assignee, Completed, CompletionDate)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)`, t.insertFields()...)
 	if err != nil {
 		return fmt.Errorf("Error saving Task: %v", err)
 	}
@@ -65,8 +70,8 @@ func (t *Task) addTimestamps() {
 }
 
 func (t *Task) Update() error {
-	_, err := db.Query(`UPDATE tasks SET (Name, Description, DueDate, Assignee) =
-        ($1, $2, $3, $4) WHERE Id = $5`, t.updateFields()...)
+	_, err := db.Query(`UPDATE tasks SET (Name, Description, DueDate, Assignee, Completed, CompletionDate) =
+        ($1, $2, $3, $4, $5, $6) WHERE Id = $7`, t.updateFields()...)
 	return err
 }
 
@@ -77,6 +82,8 @@ func (t *Task) insertFields() []interface{} {
 		&t.Description,
 		&t.DueDate,
 		&t.Assignee,
+		&t.Completed,
+		&t.CompletionDate,
 	}
 }
 
@@ -86,6 +93,8 @@ func (t *Task) updateFields() []interface{} {
 		&t.Description,
 		&t.DueDate,
 		&t.Assignee,
+		&t.Completed,
+		&t.CompletionDate,
 		&t.Id,
 	}
 }
@@ -103,7 +112,7 @@ func AllTasks() ([]*Task, error) {
 
 	for rows.Next() {
 		var t Task
-		err = rows.Scan(t.insertFields()...)
+		err = rows.Scan((&t).insertFields()...)
 		if err != nil {
 			log.Printf("Error scanning row: %v\n", err)
 			continue
@@ -142,6 +151,11 @@ func UpdateTask(idStr string, t *Task) (*Task, error) {
 	}
 	if t.Assignee != "" {
 		task.Assignee = t.Assignee
+	}
+	if t.Completed {
+		task.Completed = t.Completed
+		now := time.Now()
+		task.CompletionDate = &now
 	}
 
 	// task.AssignedTo = t.AssignedTo

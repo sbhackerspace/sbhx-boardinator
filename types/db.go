@@ -43,5 +43,7 @@ var createTableTasks = `CREATE TABLE tasks (
     Name        varchar(100) NOT NULL,
     Description varchar(4096),
     DueDate     timestamp with time zone,
-    Assignee    varchar(100)
+    Assignee    varchar(100),
+    Completed   boolean NOT NULL,
+    CompletionDate timestamp with time zone
 );`
