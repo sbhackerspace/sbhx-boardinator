@@ -88,15 +88,9 @@ func (t *Task) insertFields() []interface{} {
 }
 
 func (t *Task) updateFields() []interface{} {
-	return []interface{}{
-		&t.Name,
-		&t.Description,
-		&t.DueDate,
-		&t.Assignee,
-		&t.Completed,
-		&t.CompletionDate,
-		&t.Id,
-	}
+	fields := t.insertFields()
+	// Move Id to the end, keep everything else the same
+	return append(fields[1:], fields[0])
 }
 
 // AllTasks retrieves all Tasks from the DB and returns a slice of 'em
