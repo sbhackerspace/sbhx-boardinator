@@ -8,7 +8,6 @@ import (
 	"flag"
 	"fmt"
 	"github.com/gorilla/mux"
-	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -36,10 +35,10 @@ var (
 )
 
 func init() {
+	router.HandleFunc("/", GetIndex).Methods("GET")
+
 	// Tasks
-	router.HandleFunc("/api/", GetIndex).Methods("GET")
 	router.HandleFunc("/api/tasks", GetTasks).Methods("GET")
-	// Let's keep it RESTful, folks
 	router.HandleFunc("/api/tasks/{id:[0-9a-f-]+}", GetTask).Methods("GET")
 	router.HandleFunc("/api/tasks/{id:[0-9a-f-]+}", UpdateTask).Methods("PUT")
 	router.HandleFunc("/api/tasks/{id:[0-9a-f-]+}", DeleteTask).Methods("DELETE")
@@ -87,10 +86,8 @@ func writeError(w http.ResponseWriter, err error, statusCode int) {
 //
 
 func GetIndex(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Welcome to Boardinator! Check out /tasks\n"))
-
-	// which is equivalent to...
-	io.WriteString(w, "Welcome to Boardinator! Check out /tasks\n")
+	http.Redirect(w, r, "/tasks", 301)
+}
 
 	// which is also equivalent to (notice string interpolation)...
 	appName := "Boardinator"
