@@ -8,6 +8,8 @@ import (
 	uuid "github.com/nu7hatch/gouuid"
 	"log"
 	"time"
+
+	"github.com/sbhackerspace/sbhx-boardinator/helpers"
 )
 
 var (
@@ -60,7 +62,7 @@ func (t *Task) Save() error {
 }
 
 func (t *Task) addTimestamps() {
-	now := time.Now()
+	now := helpers.Now()
 	if t.CreatedAt == nil {
 		t.CreatedAt = &now
 	}
@@ -135,7 +137,7 @@ func UpdateTask(idStr string, t *Task) (*Task, error) {
 	if err != nil {
 		return nil, err
 	}
-	// now := time.Now()
+	// now := helpers.Now()
 
 	if t.Name != "" {
 		task.Name = t.Name
@@ -151,7 +153,7 @@ func UpdateTask(idStr string, t *Task) (*Task, error) {
 	}
 	if t.Completed {
 		task.Completed = t.Completed
-		now := time.Now()
+		now := helpers.Now()
 		task.CompletionDate = &now
 	}
 
