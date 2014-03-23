@@ -105,26 +105,26 @@ func AllTasks() ([]*Task, error) {
 	var tasks []*Task
 
 	for rows.Next() {
-		var t Task
-		err = rows.Scan((&t).insertFields()...)
+		t := &Task{}
+		err = rows.Scan(t.insertFields()...)
 		if err != nil {
 			log.Printf("Error scanning row: %v\n", err)
 			continue
 		}
-		tasks = append(tasks, &t)
+		tasks = append(tasks, t)
 	}
 
 	return tasks, nil
 }
 
 func GetTask(idStr string) (*Task, error) {
-	var task Task
+	t := &Task{}
 	err := db.QueryRow(`SELECT * FROM tasks WHERE Id = $1`, idStr).
-		Scan((&task).insertFields()...)
+		Scan(t.insertFields()...)
 	if err != nil {
 		return nil, fmt.Errorf("Task not found: %v", err)
 	}
-	return &task, nil
+	return t, nil
 }
 
 func UpdateTask(idStr string, t *Task) (*Task, error) {

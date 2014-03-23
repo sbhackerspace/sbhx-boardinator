@@ -193,7 +193,7 @@ func GetTask(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	id := params["id"]
 
-	task, err := types.GetTask(id)
+	t, err := types.GetTask(id)
 	if err != nil {
 		if err == types.ErrTaskNotFound {
 			writeError(w, err, 404)
@@ -204,7 +204,7 @@ func GetTask(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Marshall Task to JSON
-	jsonData, err := json.Marshal(task)
+	jsonData, err := json.Marshal(t)
 	if err != nil {
 		writeError(w, err, 500)
 		return
