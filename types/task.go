@@ -67,6 +67,9 @@ func (t *Task) addTimestamps() {
 	if t.ModifiedAt == nil {
 		t.ModifiedAt = &now
 	}
+	if t.Completed && t.CompletionDate == nil {
+		t.CompletionDate = &now
+	}
 }
 
 func (t *Task) Update() error {
