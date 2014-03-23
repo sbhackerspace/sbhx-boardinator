@@ -14,12 +14,18 @@ assignee, emails the Board when a task is not completed on time, etc).
 
 ### Postres Setup
 
+The following instructions are for Postgres 8.4 and 9.1, and should be
+almost identical for newer versions.
+
 In command line shell (probably Bash):
 
 ```
 $ sudo su postgres
 $ createuser boardinator
 ```
+
+Answer `n` to each of the 3 questions. Newer versions of Postgres
+require `createuser --interactie boardinator`.
 
 In Postgres shell (transition with `psql` command):
 
