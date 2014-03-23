@@ -93,7 +93,7 @@ func GetIndex(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/tasks", 301)
 }
 
-var showTasksTmpl = template.Must(template.New("name").Parse(`
+var showTasksTmpl = template.Must(template.New("showTasks").Parse(`
 <html>
 <title>Tasks</title>
 <body>
