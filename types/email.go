@@ -45,16 +45,21 @@ func handleEmailError(e *Email, err error) {
 }
 
 func (e *Email) SaveAndSend() {
+	done := make(chan struct{})
+
 	// Save
 	go func() {
 		if err := e.Save(); err != nil {
 			handleEmailError(e, err)
 		}
+		done <- struct{}{}
 	}()
+
 	// Send
-	go func() {
-		EmailQueue <- e
-	}()
+	EmailQueue <- e
+
+	// Wait for Save to finish before returning
+	<-done
 }
 
 func StartEmailQueue() {
