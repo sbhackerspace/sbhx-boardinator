@@ -7,6 +7,8 @@ import (
 	uuid "github.com/nu7hatch/gouuid"
 	"log"
 	"time"
+
+	"github.com/sbhackerspace/sbhx-boardinator/helpers"
 )
 
 // TODO: Replace with Postgres DB
@@ -104,7 +106,7 @@ func (e *Email) Save() error {
 }
 
 func (e *Email) populateNew() {
-	now := time.Now()
+	now := helpers.Now()
 	e.CreatedAt = &now
 	e.ModifiedAt = &now
 }

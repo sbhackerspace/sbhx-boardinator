@@ -8,20 +8,28 @@ import (
 	uuid "github.com/nu7hatch/gouuid"
 	"log"
 	"time"
+
+	"github.com/sbhackerspace/sbhx-boardinator/helpers"
 )
 
 var (
 	ErrTaskNotFound = errors.New("Task not found")
 )
 
-// TODO: Replace with Postgres DB
-var taskDB = map[string]*Task{}
-
 type Task struct {
 	Id          string     `json:"id"`
 	Name        string     `json:"name"`
 	Description string     `json:"description"`
 	DueDate     *time.Time `json:"due_date"`
+
+	// FIXME: Use (*AssignedTo).{FirstName,LastName,Email} instead
+	Assignee string `json:"assignee"`
+
+	Completed      bool       `json:"completed"`
+	CompletionDate *time.Time `json:"completion_date"`
+
+	// TODO: Use these fields
+
 	CreatedBy   *User      `json:"created_by"`
 	AssignedTo  *User      `json:"assigned_to"`
 	Parent      *Task      `json:"parent"`
@@ -41,57 +49,137 @@ func (t *Task) Save() error {
 	}
 	idStr := id.String()
 	t.Id = idStr
-	t.populateNew()
+	t.addTimestamps()
 
-	// TODO: Replace with real DB
-	taskDB[idStr] = t
+	_, err = db.Query(`INSERT INTO tasks (Id, Name, Description, DueDate, Assignee, Completed, CompletionDate)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)`, t.insertFields()...)
+	if err != nil {
+		return fmt.Errorf("Error saving Task: %v", err)
+	}
 
 	log.Printf("New *Task created: %+v\n", t)
 	return nil
 }
 
-func (t *Task) populateNew() {
-	now := time.Now()
-	t.CreatedAt = &now
-	t.ModifiedAt = &now
+func (t *Task) addTimestamps() {
+	now := helpers.Now()
+	if t.CreatedAt == nil {
+		t.CreatedAt = &now
+	}
+	if t.ModifiedAt == nil {
+		t.ModifiedAt = &now
+	}
+	if t.Completed && t.CompletionDate == nil {
+		t.CompletionDate = &now
+	}
+}
+
+func (t *Task) Update() error {
+	_, err := db.Query(`UPDATE tasks SET (Name, Description, DueDate, Assignee, Completed, CompletionDate) =
+        ($1, $2, $3, $4, $5, $6) WHERE Id = $7`, t.updateFields()...)
+	return err
+}
+
+func (t *Task) insertFields() []interface{} {
+	return []interface{}{
+		&t.Id,
+		&t.Name,
+		&t.Description,
+		&t.DueDate,
+		&t.Assignee,
+		&t.Completed,
+		&t.CompletionDate,
+	}
+}
+
+func (t *Task) updateFields() []interface{} {
+	fields := t.insertFields()
+	// Move Id to the end, keep everything else the same
+	return append(fields[1:], fields[0])
 }
 
 // AllTasks retrieves all Tasks from the DB and returns a slice of 'em
 func AllTasks() ([]*Task, error) {
-	tasks := make([]*Task, 0, len(taskDB))
-	for _, t := range taskDB {
+	// Get rows
+	rows, err := db.Query(`SELECT * FROM tasks`)
+	if err != nil {
+		return nil, fmt.Errorf("Error getting all Tasks: %v", err)
+	}
+
+	// Iterate over rows
+	var tasks []*Task
+
+	for rows.Next() {
+		t := &Task{}
+		err = rows.Scan(t.insertFields()...)
+		if err != nil {
+			log.Printf("Error scanning row: %v\n", err)
+			continue
+		}
 		tasks = append(tasks, t)
 	}
+
 	return tasks, nil
 }
 
 func GetTask(idStr string) (*Task, error) {
-	// TODO: Proper error handling
-	// TODO: Replace with real DB
-	task, found := taskDB[idStr]
-	if !found {
-		return nil, ErrTaskNotFound
+	t := &Task{}
+	err := db.QueryRow(`SELECT * FROM tasks WHERE Id = $1`, idStr).
+		Scan(t.insertFields()...)
+	if err != nil {
+		return nil, fmt.Errorf("Task not found: %v", err)
 	}
-	return task, nil
+	return t, nil
 }
 
 func UpdateTask(idStr string, t *Task) (*Task, error) {
-	task := taskDB[idStr]
-	now := time.Now()
+	task, err := GetTask(idStr)
+	if err != nil {
+		return nil, err
+	}
+	// now := helpers.Now()
 
-	task.Name = t.Name
-	task.Description = t.Description
-	task.DueDate = t.DueDate
-	task.AssignedTo = t.AssignedTo
-	task.Parent = t.Parent
-	task.ModifiedAt = &now
+	if t.Name != "" {
+		task.Name = t.Name
+	}
+	if t.Description != "" {
+		task.Description = t.Description
+	}
+	if t.DueDate != nil {
+		task.DueDate = t.DueDate
+	}
+	if t.Assignee != "" {
+		task.Assignee = t.Assignee
+	}
+	if t.Completed {
+		task.Completed = t.Completed
+		now := helpers.Now()
+		task.CompletionDate = &now
+	}
+
+	// task.AssignedTo = t.AssignedTo
+	// task.Parent = t.Parent
+	// task.ModifiedAt = &now
+
+	err = task.Update()
+	if err != nil {
+		return nil, fmt.Errorf("Error updating Task: %v", err)
+	}
 
 	return task, nil
 }
 
 func DeleteTask(idStr string) error {
-	// TODO: Proper error handling
-	// TODO: Replace with real DB
-	delete(taskDB, idStr)
+	result, err := db.Exec(`DELETE FROM tasks WHERE id = $1`, idStr)
+	if err != nil {
+		return fmt.Errorf("Error deleting Task: %v", err)
+	}
+	affected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("Error getting RowsAffected: %v", err)
+	}
+	if affected == 0 {
+		return ErrTaskNotFound
+	}
 	return nil
 }

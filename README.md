@@ -10,10 +10,64 @@ things with that information (e.g., sends reminder emails to the
 assignee, emails the Board when a task is not completed on time, etc).
 
 
-## Tutorial
+## Quickstart
+
+### Postres Setup
+
+The following instructions are for Postgres 8.4 and 9.1, and should be
+almost identical for newer versions.
+
+In command line shell (probably Bash):
+
+```
+sudo su postgres
+createuser boardinator  # answer `n` to each of the 3 questions
+```
+
+Newer versions of Postgres require `createuser --interactive
+boardinator` instead.
+
+In Postgres shell (transition with `psql` command):
+
+```
+CREATE DATABASE boardinator;
+CREATE TABLE tasks (
+    Id             varchar(36) NOT NULL,
+    Name           varchar(100) NOT NULL,
+    Description    varchar(4096),
+    DueDate        timestamp with time zone,
+    Assignee       varchar(100),
+    Completed      boolean NOT NULL,
+    CompletionDate timestamp with time zone
+);
+GRANT ALL PRIVILEGES ON tasks TO boardinator;
+ALTER ROLE boardinator WITH PASSWORD 'boardinator';
+```
+
 
 ### Create New Task
 
 ```
-curl -X POST -d '{"name": "Test Task", "due_date": "2014-03-22T19:30:00-07:00", "username": "Steve", "description": "Finish API Task creation"}' http://localhost:6060/api/tasks
+curl -X POST -d \
+'{"name": "Boardinator MVP", "due_date": "2014-03-22T17:30:00-07:00", "assignee": "elimisteve@gmail.com", "description": "Finish API Task creation"}' \
+http://localhost:6060/api/tasks
 ```
+
+
+### Update Task
+
+`curl -X PUT -d '{"completed":true}' http://localhost:6060/api/tasks/49ebc56f-dfdb-4a11-4d9c-d83d488f987a`
+
+
+### Get Task
+
+`curl -X GET http://localhost:6060/api/tasks/49ebc56f-dfdb-4a11-4d9c-d83d488f987a`
+
+or simply
+
+`curl http://localhost:6060/api/tasks/49ebc56f-dfdb-4a11-4d9c-d83d488f987a`
+
+
+### Delete Task
+
+`curl -X DELETE http://localhost:6060/api/tasks/49ebc56f-dfdb-4a11-4d9c-d83d488f987a`

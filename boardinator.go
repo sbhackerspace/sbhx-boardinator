@@ -8,6 +8,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/gorilla/mux"
+	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -36,6 +37,9 @@ var (
 
 func init() {
 	router.HandleFunc("/", GetIndex).Methods("GET")
+
+	// TEMPORARY; We want an AngularJS CRUD UI instead
+	router.HandleFunc("/tasks", ShowTasks).Methods("GET")
 
 	// Tasks
 	router.HandleFunc("/api/tasks", GetTasks).Methods("GET")
@@ -89,10 +93,45 @@ func GetIndex(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/tasks", 301)
 }
 
-	// which is also equivalent to (notice string interpolation)...
-	appName := "Boardinator"
-	mainURL := "/api/tasks"
-	fmt.Fprintf(w, "Welcome to %s! Check out %s\n", appName, mainURL)
+var showTasksTmpl = template.Must(template.New("showTasks").Parse(`
+<html>
+<title>Tasks</title>
+<body>
+<h2>Tasks</h2>
+<div class="tasks">
+  {{range .}}
+  <p>
+    <strong>Title</strong>:           {{.Name}}<br>
+    {{if .Description}}
+    <strong>Description</strong>:     {{.Description}}<br>
+    {{end}}
+    <strong>Assignee</strong>:        {{.Assignee}}<br>
+    <strong>Due Date</strong>:        {{.DueDate}}<br>
+    <strong>Completed?</strong>:      {{.Completed}}<br>
+    {{if and .Completed .CompletionDate}}
+    <strong>Completion Date</strong>: {{.CompletionDate}}<br>
+    {{end}}
+    <strong>Id</strong>:              {{.Id}}<br>
+  </p>
+  {{end}}
+</div>
+</body>
+</html>
+`))
+
+func ShowTasks(w http.ResponseWriter, r *http.Request) {
+	// Grab all Tasks from DB
+	tasks, err := types.AllTasks()
+	if err != nil {
+		writeError(w, err, 500)
+		return
+	}
+	// Render template with Tasks included
+	err = showTasksTmpl.Execute(w, tasks)
+	if err != nil {
+		writeError(w, err, 500)
+		return
+	}
 }
 
 // GetTasks retrieves all Tasks and returns them as JSON
@@ -154,7 +193,7 @@ func GetTask(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	id := params["id"]
 
-	task, err := types.GetTask(id)
+	t, err := types.GetTask(id)
 	if err != nil {
 		if err == types.ErrTaskNotFound {
 			writeError(w, err, 404)
@@ -165,7 +204,7 @@ func GetTask(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Marshall Task to JSON
-	jsonData, err := json.Marshal(task)
+	jsonData, err := json.Marshal(t)
 	if err != nil {
 		writeError(w, err, 500)
 		return
