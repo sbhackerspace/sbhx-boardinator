@@ -49,6 +49,8 @@ func init() {
 	// Email Board
 	router.HandleFunc("/api/email", SendEmail).Methods("POST")
 
+	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./ui/app")))
+
 	http.Handle("/api/", router)
 }
 
