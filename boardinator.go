@@ -36,8 +36,6 @@ var (
 )
 
 func init() {
-	router.HandleFunc("/", GetIndex).Methods("GET")
-
 	// TEMPORARY; We want an AngularJS CRUD UI instead
 	router.HandleFunc("/tasks", ShowTasks).Methods("GET")
 
@@ -88,10 +86,6 @@ func writeError(w http.ResponseWriter, err error, statusCode int) {
 //
 // HTTP Handler functions
 //
-
-func GetIndex(w http.ResponseWriter, r *http.Request) {
-	http.Redirect(w, r, "/tasks", 301)
-}
 
 var showTasksTmpl = template.Must(template.New("showTasks").Parse(`
 <html>
