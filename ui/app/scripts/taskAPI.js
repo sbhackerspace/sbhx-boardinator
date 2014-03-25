@@ -4,9 +4,7 @@ var Task = function(json) {
     var name = json.name;
     var description = json.description;
     console.log(name);  
-    console.log(description);
-
-    
+    console.log(description);    
 
 }
 

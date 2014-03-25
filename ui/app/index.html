@@ -11,14 +11,10 @@
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-        <!-- build:css({.tmp,app}) styles/main.css -->
-        <link rel="stylesheet" href="styles/bootstrap.css">
+        <!-- build:css({.tmp,app}) styles/main.css -->                             
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">                   
+        <link rel="stylesheet" type="text/css" href="styles/vendor/bootstrap.css">
         <link rel="stylesheet" href="styles/main.css">
-        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-        <link rel="stylesheet" href="styles/style.css" />
-        <link rel="stylesheet" href="styles/vendor/font-awesome-min.css" />
-        <link rel="stylesheet" href='styles/vendor/fullcalendar.css' />
         <!-- endbuild -->
 </head>
   <body ng-app="uiApp" class="body">
@@ -48,8 +44,8 @@
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav side-nav">
                 <li><a href="/"><i class="fa fa-dashboard"></i> My Dashboard</a></li>
-                <li><a href="/calendar"><i class="fa fa-table"></i> My Calendar</a></li>
-                <li><a href="/tasks"><i class="fa fa-edit"></i> My Tasks</a></li>
+                <li><a href="#calendar"><i class="fa fa-table"></i> My Calendar</a></li>
+                <li><a href="#tasks"><i class="fa fa-edit"></i> My Tasks</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right navbar-user">                                                
@@ -79,8 +75,7 @@
 
        ga('create', 'UA-XXXXX-X');
        ga('send', 'pageview');
-    </script>
-
+    </script>    
     <script src="bower_components/jquery/jquery.js"></script>
     <script src="bower_components/angular/angular.js"></script>
 
@@ -108,8 +103,11 @@
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
+
+        <!-- Controllers -->
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/tasks.js"></script>
+        <script src="scripts/controllers/calendar.js"></script>
         <!-- endbuild -->
 </body>
 </html>

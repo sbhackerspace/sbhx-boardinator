@@ -1,26 +1,30 @@
 'use strict';
 
-angular.module('uiApp', [
+var app = angular.module('uiApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
   'ngRoute'
-])
-  .config(function ($routeProvider) {
+]);
+
+
+app.config(function ($routeProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: '/ui/app/views/main.html',
+        templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
       .when('/tasks', {
-        templateUrl: '/ui/app/views/tasks.html',
+        templateUrl: 'views/tasks.html',
         controller: 'TasksCtrl'
       })
       .when('/calendar', {
-        templateUrl: '/ui/app/views/calendar.html',
+        templateUrl: 'views/calendar.html',
         controller: 'CalendarCtrl'
       })
       .otherwise({
         redirectTo: '/'
       });
   });
+
+
