@@ -71,3 +71,38 @@ or simply
 ### Delete Task
 
 `curl -X DELETE http://localhost:6060/api/tasks/49ebc56f-dfdb-4a11-4d9c-d83d488f987a`
+
+
+## AngularJS Dependencies installation
+
+### Install Yeoman:
+
+Visit http://yeoman.io/ for detailed documentation:
+
+`npm install -g yo`
+
+or
+
+`sudo npm install -g yo`
+
+
+### Use Bower to install your App Dependencies:
+
+Once yeoman is installed, cd into the ui directory & type (for current
+application dependencies):
+
+`bower install` 
+
+
+## Run the App
+
+When bower install is completed, simply type:
+
+`grunt serve`
+
+and that will start your Angular Application on localhost!  More
+likely you will want to run the backend.  Do do so, type
+
+`go run boardinator.go`
+
+then visit <http://localhost:6060/>.
