@@ -4,7 +4,8 @@ var app = angular.module('uiApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
-  'ngRoute'
+  'ngRoute',
+  'ui.bootstrap'
 ]);
 
 

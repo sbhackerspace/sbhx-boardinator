@@ -11,10 +11,11 @@
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-        <!-- build:css({.tmp,app}) styles/main.css -->                             
-        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">                   
+        <!-- build:css({.tmp,app}) styles/main.css -->                                             
         <link rel="stylesheet" type="text/css" href="styles/vendor/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="bower_components/font-awesome/css/font-awesome.css">
         <link rel="stylesheet" href="styles/main.css">
+
         <!-- endbuild -->
 </head>
   <body ng-app="uiApp" class="body">
@@ -45,8 +46,8 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                     <li><a href="/"><i class="fa fa-dashboard"></i> My Dashboard</a></li>
-                    <li><a href="#calendar"><i class="fa fa-table"></i> My Calendar</a></li>
                     <li><a href="#tasks"><i class="fa fa-edit"></i> My Tasks</a></li>
+                    <li><a href="#calendar"><i class="fa fa-table"></i> My Calendar</a></li>                    
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right navbar-user">                                                
@@ -104,6 +105,7 @@
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
+    <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <!-- endbuild -->
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
