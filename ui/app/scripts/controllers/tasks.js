@@ -10,23 +10,21 @@ app.controller('TasksCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.showTaskList = true;
 
     $scope.submitTaskForm = function (fromData) {
-    	var params = {
-    		Id: '',
-    		Name: formData.name,
-    		Description: formData.description,
-    		DueDate: formData.dueDate,
-    		Assignee: formData.assignee,
-    	};
+        var params = {        
+            Name: formData.name,
+            Description: formData.description,
+            DueDate: formData.dueDate,
+            Assignee: formData.assignee,
+        };
 
-    	$http.post('url', params)
-    		.then(function(e) {
-    			console.log(e);
-    		})    	
+        $http.post('url', params)
+            .then(function(e) {                
+            })      
     };
-
+   
     $scope.dateOptions = {
-    	'year-format': "'yy'",
-    	'starting-day': 1
+        'year-format': "'yy'",
+        'starting-day': 1
     };
 
   }]);
