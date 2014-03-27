@@ -8,6 +8,46 @@
   </div>
 </div>
 
+<div class="row" ng-show="showTaskList && tasks"> 
+  <div class="col-lg-12">
+    <h3>List all Tasks:</h3>
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-money"></i> Current Open Tasks:</h3>
+      </div>
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover table-striped tablesorter">
+            <thead>
+              <tr>
+                <th>Assignor <i class="fa fa-sort"></i></th>
+                <th>Name</th>
+                <th>Due Date <i class="fa fa-calendar-o"></i></th>
+                <th>Task Description <i class="fa fa-book"></i></th>
+                <th>Priority <i class="fa fa-sort"></i></th>
+                <th>Edit <i class="fa fa-pencil-square-o"></i></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-if="tasks.length > 0" ng-repeat="task in tasks | orderBy: priority">
+                <td>{{ task.assignor }}</td>
+                <td>{{ task.name }}</td>
+                <td>{{ task.dueDate }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.priority }}</td>
+                <td><a ng-click="editTask(task);">Edit <i class="fa fa-pencil-square-o"></i></td>
+              </tr>
+              <tr ng-if="tasks.length===0">
+                <td colspan="6">You currently don't have any assigned Tasks!</td>
+              </tr>           
+            </tbody>
+          </table>
+        </div>        
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class='row' ng-show="showTaskForm">
   <div class='col-lg-12'>
     <div class='box bordered-box blue-border box-nomargin'>    
@@ -15,7 +55,7 @@
         <form name="taskForm" novalidate>          
           <div class="form-group">
             <label>Task Name</label>
-            <input ng-model="task.name" class="form-control" placeholder="Enter your Task Name" required>
+            <input ng-model="task.name" ng-pattern="/^[a-zA-Z-' ]+$/" class="form-control" placeholder="Enter your Task Name" required>
           </div>
           <div class="form-group">
             <label>Task Description</label>
@@ -33,20 +73,20 @@
           <div class="form-group">
             <label>Task due date:</label>
             <div class='input-group date' id='datetimepicker'>              
-              <input ng-model="task.dueDate" type='text' class="form-control" datepicker-popup="yyyy/MM/dd" is-open="opened" datepicker-options="dateOptions" required />
+              <input ng-model="task.dueDate" type='text' class="form-control" datepicker-popup="{{format}}" is-open="opened" datepicker-options="dateOptions" />
               <span class="input-group-addon"><span class="fa fa-calendar"></span></span>              
             </div>
           </div>
           <div class="form-group">
             <label>Task Priority</label>
             <select ng-model="task.priority" class="form-control">
-            	<option value="">--Rank Task Priority--</option>
+            	<option value="">-- Rank Task Priority --</option>
               <option value="High">High</option>
               <option value="Medium">Medium</option>
               <option value="Low">Low</option>                            
             </select>
           </div>             
-          <button type="submit" class="btn btn-large btn-primary" ng-click="submitTaskFrom(task)"><i class="fa fa-floppy-o"></i> Create New Task</button>
+          <button type="submit" class="btn btn-large btn-primary" ng-disabled="taskForm.$invalid" ng-click="submitTaskForm(task); showTaskForm=false; showTaskList=true;"><i class="fa fa-floppy-o"></i> Create New Task</button>
           <button type="submit" class="btn btn-large btn-danger" ng-click="showTaskForm=false; showTaskList=true;"><i class="fa fa-times"></i> Cancel</button>  
         </form>       
       </div>
