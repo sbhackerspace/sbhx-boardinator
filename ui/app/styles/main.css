@@ -1,5 +1,7 @@
+/* Global CSS */
 /* Global Margin Top */
 .margin-top-50 { margin-top: 50px; }
+.float-right { float: right; }
 
 /* Space out content a bit */
 body {
@@ -13,6 +15,7 @@ body {
   padding: 15px 25px;
   width: 100%;
 }
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
 .marketing,

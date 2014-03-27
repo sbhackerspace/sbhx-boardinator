@@ -1,7 +1,56 @@
-<div class="jumbotron">
-  <h1>Tasks Page</h1>
-  <p class="lead">   
-  	Find me in views/tasks.html 
-  </p>
+<div class="row">
+  <div class="col-lg-12">
+    <h1>Task <small>Overview</small></h1>
+    <button type="submit" class="btn btn-large btn-primary float-right" ng-click="task={}; showTaskForm=true; showTaskList=false;"><i class="fa fa-pencil"></i> Create a New Task</button>
+    <ol class="breadcrumb">
+      <li class="active"><i class="fa fa-calendar"></i> This is the place to Manage & Assign Tasks</li>
+    </ol>    
+  </div>
+</div>
+
+<div class='row' ng-show="showTaskForm">
+  <div class='col-lg-12'>
+    <div class='box bordered-box blue-border box-nomargin'>    
+      <div class='box-content'>
+        <form name="taskForm">          
+          <div class="form-group">
+            <label>Task Name</label>
+            <input ng-model="task.name" class="form-control" placeholder="Enter your Task Name" required>
+          </div>
+          <div class="form-group">
+            <label>Task Description</label>
+            <textarea ng-model="task.description" class="form-control" rows="2" placeholder="Please briefly descibe your task..." required></textarea>
+          </div>
+          <div class="form-group">
+          	<label>Assignee</label>
+          	<select ng-model="task.assignee" class="form-control">
+          		<option value="">Choose your Task Assignee</option>
+          		<option value="Person A">Person A</option>
+          		<option value="Person B">Person B</option>
+          		<option value="Person C">Person C</option>
+          	</select>
+          </div> 
+          <div class="form-group">
+            <label>Task due date:</label>
+            <div class='input-group date' id='datetimepicker'>              
+              <input ng-model="task.dueDate" type='text' class="form-control" datepicker-popup="yyyy/MM/dd" is-open="opened" datepicker-options="dateOptions" required />
+              <span class="input-group-addon"><span class="fa fa-calendar"></span></span>              
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Task Priority</label>
+            <select ng-model="task.priority" class="form-control">
+            	<option value="">--Rank Task Priority--</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>                            
+            </select>
+          </div>             
+          <button type="submit" class="btn btn-large btn-primary" ng-click="submitTaskFrom(task)"><i class="fa fa-floppy-o"></i> Create New Task</button>
+          <button type="submit" class="btn btn-large btn-danger" ng-click="showTaskForm=false; showTaskList=true;"><i class="fa fa-times"></i> Cancel</button>  
+        </form>       
+      </div>
+    </div>
+  </div>           
 </div>
 
