@@ -6,14 +6,14 @@
 /* Space out content a bit */
 body {
   padding-top: 20px;
-  padding-bottom: 20px;
+  padding-bottom: 20px;  
 }
 #wrapper {
-  padding-left: 225px;
+  padding-left: 0;
 }
-#page-wrapper {
-  padding: 15px 25px;
+#page-wrapper {  
   width: 100%;
+  padding: 5px 15px;
 }
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
 /* Everything but the jumbotron gets side spacing for mobile first views */
@@ -72,8 +72,14 @@ body {
 }
 
 /* Responsive: Portrait tablets and up */
-@media screen and (min-width: 768px) {
-  /* Remove the padding we set earlier */
+@media screen and (min-width: 768px) {  
+  #wrapper {
+    padding-left: 225px;
+  }
+  #page-wrapper {
+    padding: 15px 25px;
+  }
+
   .header,
   .marketing,
   .footer {
