@@ -17,19 +17,10 @@ assignee, emails the Board when a task is not completed on time, etc).
 The following instructions are for Postgres 8.4 and 9.1, and should be
 almost identical for newer versions.
 
-In command line shell (probably Bash):
-
-```
-sudo su postgres
-createuser boardinator  # answer `n` to each of the 3 questions
-```
-
-Newer versions of Postgres require `createuser --interactive
-boardinator` instead.
-
 In Postgres shell (transition with `psql` command):
 
 ```
+CREATE USER boardinator WITH PASSWORD 'boardinator';
 CREATE DATABASE boardinator;
 CREATE TABLE tasks (
     Id             varchar(36) NOT NULL,
@@ -41,7 +32,6 @@ CREATE TABLE tasks (
     CompletionDate timestamp with time zone
 );
 GRANT ALL PRIVILEGES ON tasks TO boardinator;
-ALTER ROLE boardinator WITH PASSWORD 'boardinator';
 ```
 
 
