@@ -4,10 +4,11 @@ package types
 
 import (
 	"fmt"
-	uuid "github.com/nu7hatch/gouuid"
 	"log"
 	"time"
 
+	"github.com/mattbaird/gochimp"
+	uuid "github.com/nu7hatch/gouuid"
 	"github.com/sbhackerspace/sbhx-boardinator/helpers"
 )
 
@@ -116,9 +117,35 @@ func (e *Email) populateNew() {
 	e.ModifiedAt = &now
 }
 
-//TODO
 func (e *Email) Send() error {
 	e.Status = SENDING
+
+	msg := gochimp.Message{
+		To: genRecipients(e.To),
+		Subject: e.Subject,
+		Text: e.Body,
+	}
+	async := false
+	responses, err := mandrill.MessageSend(msg, async)
+	if err != nil {
+		e.Status = FAILED
+		return err
+	}
+	e.Status = SUCCESS
+
+	// Give us the good news
+	for i := 0; i < len(responses); i++ {
+		log.Printf("%s: %s\n", responses[i].Email, responses[i].Status)
+	}
+
 	log.Printf("Email sent: %+v\n", e)
 	return nil
+}
+
+func genRecipients(emails []string) []gochimp.Recipient {
+	recip := make([]gochimp.Recipient, len(emails))
+	for i := 0; i < len(emails); i++ {
+		recip[i] = gochimp.Recipient{Email: emails[i]}
+	}
+	return recip
 }
