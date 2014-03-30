@@ -31,7 +31,7 @@
               <tr ng-if="tasks.length > 0" ng-repeat="task in tasks | orderBy: priority">
                 <td>{{ task.assignee }}</td>
                 <td>{{ task.name }}</td>
-                <td>{{ task.dueDate }}</td>
+                <td>{{ task.due_date }}</td>
                 <td>{{ task.description }}</td>                
                 <td><a ng-click="editTask(task);">Edit <i class="fa fa-pencil-square-o"></i></td>
               </tr>
@@ -57,11 +57,11 @@
           </div>
           <div class="form-group">
             <label>Task Description</label>
-            <textarea ng-model="task.description" class="form-control" rows="2" placeholder="Please briefly describe your task..." required></textarea>
+            <textarea ng-model="task.description" class="form-control" rows="3" placeholder="Please briefly describe your Task needs to accomoplish...." required></textarea>
           </div>
           <div class="form-group">
           	<label>Assignee</label>
-          	<input ng-model="task.assignee" class="form-control" placeholder="Who would you like to assign this Task to? (Name or Email)" required>
+          	<input ng-model="task.assignee" class="form-control" placeholder="Who would you like to assign this Task to? (Name or Email)">
           </div> 
           <div class="form-group">
             <label>Task due date:</label>
