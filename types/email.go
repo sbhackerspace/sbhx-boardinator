@@ -116,9 +116,18 @@ func (e *Email) populateNew() {
 	e.ModifiedAt = &now
 }
 
-//TODO
 func (e *Email) Send() error {
 	e.Status = SENDING
+
+	// `sender` defined in mandrill.go
+	err := sender.SendSimple(e.From, e.To, e.Subject, e.Body)
+	if err != nil {
+		e.Status = FAILED
+		return fmt.Errorf("Error sending Email: %v\n", err)
+	}
+
 	log.Printf("Email sent: %+v\n", e)
+	e.Status = SUCCESS
+
 	return nil
 }
