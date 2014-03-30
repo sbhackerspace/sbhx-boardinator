@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-lg-12">
-    <h1>Task <small>Overview</small></h1>
+    <h1>Task Management<small> Overview</small></h1>
     <button type="submit" class="btn btn-large btn-primary float-right" ng-click="task={}; showTaskForm=true; showTaskList=false;"><i class="fa fa-pencil"></i> Create a New Task</button>
     <ol class="breadcrumb">
       <li class="active"><i class="fa fa-calendar"></i> This is the place to Manage & Assign Tasks</li>
@@ -10,18 +10,18 @@
 
 <div class="row" ng-show="showTaskList && tasks"> 
   <div class="col-lg-12">
-    <h3>List all Tasks:</h3>
+    <h3>Current Assignee Tasks:</h3>
     <div class="panel panel-primary">
       <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-money"></i> Current Open Tasks:</h3>
+        <h3 class="panel-title"><i class="fa fa-money"></i> Manage your current Assignee Tasks:</h3>
       </div>
       <div class="panel-body">
         <div class="table-responsive">
           <table class="table table-bordered table-hover table-striped tablesorter">
             <thead>
               <tr>
-                <th>Assignor <i class="fa fa-sort"></i></th>
-                <th>Name</th>
+                <th>Assignee <i class="fa fa-sort"></i></th>
+                <th>Title</th>
                 <th>Due Date <i class="fa fa-calendar-o"></i></th>
                 <th>Task Description <i class="fa fa-book"></i></th>
                 <th>Priority <i class="fa fa-sort"></i></th>
@@ -30,7 +30,7 @@
             </thead>
             <tbody>
               <tr ng-if="tasks.length > 0" ng-repeat="task in tasks | orderBy: priority">
-                <td>{{ task.assignor }}</td>
+                <td>{{ task.assignee }}</td>
                 <td>{{ task.name }}</td>
                 <td>{{ task.dueDate }}</td>
                 <td>{{ task.description }}</td>
@@ -54,8 +54,8 @@
       <div class='box-content'>
         <form name="taskForm" novalidate>          
           <div class="form-group">
-            <label>Task Name</label>
-            <input ng-model="task.name" ng-pattern="/^[a-zA-Z-' ]+$/" class="form-control" placeholder="Enter your Task Name" required>
+            <label>Task Title</label>
+            <input ng-model="task.name" class="form-control" placeholder="Enter your Task Name" required>
           </div>
           <div class="form-group">
             <label>Task Description</label>
@@ -63,12 +63,7 @@
           </div>
           <div class="form-group">
           	<label>Assignee</label>
-          	<select ng-model="task.assignee" class="form-control">
-          		<option value="">Choose your Task Assignee</option>
-          		<option value="Person A">Person A</option>
-          		<option value="Person B">Person B</option>
-          		<option value="Person C">Person C</option>
-          	</select>
+          	<input ng-model="task.assignee" class="form-control" placeholder="Who would you like to assign this Task to? (Name or Email)" required>
           </div> 
           <div class="form-group">
             <label>Task due date:</label>

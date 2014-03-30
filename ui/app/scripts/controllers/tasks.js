@@ -4,30 +4,32 @@ app.controller('TasksCtrl', ['$scope', '$http', '$filter', function ($scope, $ht
 
     $scope.showTaskList = true;
     $scope.tasks = [
-        {assignor: 'Jay Kan', name: 'Task Name', dueDate: '12/31/2015', description: 'Sample Task Description Sample Task Description Sample Task Description', priority: 'High'},
-        {assignor: 'AJ', name: 'Task Name', dueDate: '12/31/2015', description: 'Test Sample Task Description Description', priority: 'Medium'},
-        {assignor: 'Steve Phillips', name: 'Task Name', dueDate: '12/31/2015', description: 'Test Task Description Sample Task Description', priority: 'Low'},
-        {assignor: 'Jim', name: 'Task Name', dueDate: '12/31/2015', description: 'Test Task Description Sample Task Description', priority: 'Medium'},
-        {assignor: 'Garry', name: 'Task Name', dueDate: '12/31/2015', description: 'Test Task Description Sample Task Description', priority: 'Low'},
-        {assignor: 'Whatever', name: 'Task Name', dueDate: '12/31/2015', description: 'Test Task DescriptionSample Task Description', priority: 'High'},
-        {assignor: 'ABC', name: 'Task Name', dueDate: '12/31/2015', description: 'Test Task Sample Task Description Description', priority: 'High'},
+        {assignee: 'Jay Kan', name: 'Task Name', dueDate: '12/31/2015', description: 'Sample Task Description Sample Task Description Sample Task Description', priority: 'High'},
+        {assignee: 'AJ', name: 'Task Name', dueDate: '12/31/2015', description: 'Test Sample Task Description Description', priority: 'Medium'},
+        {assignee: 'Steve Phillips', name: 'Task Name', dueDate: '12/31/2015', description: 'Test Task Description Sample Task Description', priority: 'Low'},
+        {assignee: 'Jim', name: 'Task Name', dueDate: '12/31/2015', description: 'Test Task Description Sample Task Description', priority: 'Medium'},
+        {assignee: 'Garry', name: 'Task Name', dueDate: '12/31/2015', description: 'Test Task Description Sample Task Description', priority: 'Low'},
+        {assignee: 'Whatever', name: 'Task Name', dueDate: '12/31/2015', description: 'Test Task DescriptionSample Task Description', priority: 'High'},
+        {assignee: 'ABC', name: 'Task Name', dueDate: '12/31/2015', description: 'Test Task Sample Task Description Description', priority: 'High'},
     ];
     $scope.submitTaskForm = function(formData) {         
-        // Format Date 
-        var datefilter = $filter('date'),
-            formattedDate = datefilter(formData.dueDate, 'yyyy/MM/dd');   
-        // API call            
-        // var params = {            
-        //     Name: formData.name,
-        //     Description: formData.description,
-        //     DueDate: formData.dueDate,
-        //     Assignee: formData.assignee,
-        // };
-
-        // $http.post('url', params)
-        //     .then(function(e) {
-
-        //     })                 
+        
+        var dateFilter = $filter('date'),
+            formattedDate = dateFilter(formData.dueDate, 'yyyy/MM/dd');   
+                    
+        var params = {            
+            name: formData.name,
+            description: formData.description,
+            due_date: formData.dueDate,
+            assignee: formData.assignee,
+        };
+        
+        var url = "http://localhost:6060/api/tasks";
+        
+        $http.post('/api/tasks', params)
+            .then(function(e) {
+                            
+            })                 
         $scope.tasks.push(formData);
     };
    
