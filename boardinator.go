@@ -277,7 +277,7 @@ func SendEmail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	go e.SaveAndSend()
+	e.SaveAndSend()
 
 	// TODO
 	// How about we return to them the saved *Email (as JSON) so
