@@ -2,26 +2,35 @@
 
 app.controller('TasksCtrl', ['$scope', '$http', '$filter', function ($scope, $http, $filter) {
 
-    $scope.showTaskList = true;
-    $scope.tasks = [
-        {assignee: 'Jay Kan', name: 'Task Name', due_date: '12/31/2015', description: 'Sample Task Description Sample Task Description Sample Task Description'},
-        {assignee: 'AJ', name: 'Task Name', due_date: '12/31/2015', description: 'Test Sample Task Description Description'},
-        {assignee: 'Steve Phillips', name: 'Task Name', due_date: '12/31/2015', description: 'Test Task Description Sample Task Description'},
-        {assignee: 'Jim', name: 'Task Name', due_date: '12/31/2015', description: 'Test Task Description Sample Task Description'},
-        {assignee: 'Garry', name: 'Task Name', due_date: '12/31/2015', description: 'Test Task Description Sample Task Description'},
-        {assignee: 'Whatever', name: 'Task Name', due_date: '12/31/2015', description: 'Test Task DescriptionSample Task Description'},
-        {assignee: 'ABC', name: 'Task Name', due_date: '12/31/2015', description: 'Test Task Sample Task Description Description'},
-    ];
+    $scope.tasks = [];
+    $scope.loadTasks = function() {
+        var data = {};
+        $http.get('/api/tasks', data)
+            .then(function(e) {
+                if(e.status === 200) {
+                    var p,
+                        dateFilter = $filter('date'),
+                        tasks = e.data;                        
+                    for (var i=0; i<tasks.length; i++) {
+                        var task = tasks[i];
+                        for (p in task) {
+                            if (p === 'due_date') {
+                                task['due_date'] = dateFilter(task.due_date, 'yyyy/MM/dd');
+                            }
+                        }
+                    }
+                    $scope.tasks = tasks;
+                }
+            })
+    };
+    
     $scope.submitTaskForm = function(formData) {         
-        
-        var dateFilter = $filter('date'),
-            formattedDate = dateFilter(formData.dueDate, 'yyyy/MM/dd');   
-                    
+                                    
         var params = {            
             name: formData.name,
-            description: formData.description.replace(/\n/g, " "),
-            due_date: formData.dueDate,
+            description: formData.description.replace(/\n/g, " "),            
             assignee: formData.assignee,
+            due_date: formData.dueDate,
         };
                 
         $http.post('/api/tasks', params)
@@ -31,14 +40,33 @@ app.controller('TasksCtrl', ['$scope', '$http', '$filter', function ($scope, $ht
                         dateFilter = $filter('date'),                    
                         task = e.data;                                        
                     for (p in task) {
-                        if (p == 'due_date') {
+                        if (p === 'due_date') {
                             task['due_date'] = dateFilter(task.due_date, 'yyyy/MM/dd');
                         }                            
                     }                                                                                  
                     $scope.tasks.push(task);
                 }                            
             })                         
-    };  
+    };
+
+    $scope.editTask = function (task) {                
+        $scope.selectedTask = task;        
+        $scope.task = {};
+        console.log(task);
+        $scope.task.name = task.name;
+        $scope.task.description = task.description;
+        $scope.task.assignee = task.assignee;  
+        $scope.task.dueDate  = task.due_date;            
+        $scope.showTaskList = false;
+        $scope.showTaskForm = true;
+        $scope.editedTask = true;
+
+        $scope.submitEdited = function(task) {
+            console.log(task);
+
+        };        
+
+    };
    
     $scope.dateOptions = {
         'year-format': "'yyyy'",

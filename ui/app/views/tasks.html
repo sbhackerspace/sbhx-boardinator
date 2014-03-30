@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-lg-12">
     <h1>Task Management<small> Overview</small></h1>
-    <button type="submit" class="btn btn-large btn-primary float-right" ng-click="task={}; showTaskForm=true; showTaskList=false;"><i class="fa fa-pencil"></i> Create a New Task</button>
+    <button type="submit" class="btn btn-large btn-primary float-right" ng-init="loadTasks(); showTaskList = true; showTaskfrom=false; selectedEvent=undefined" ng-click="task={}; showTaskForm=true; showTaskList=false; editedTask=false; selectedTask=undefined;"><i class="fa fa-pencil"></i> Create a New Task</button>
     <ol class="breadcrumb">
       <li class="active"><i class="fa fa-calendar"></i> This is the place to Manage & Assign Tasks</li>
     </ol>    
@@ -28,7 +28,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-if="tasks.length > 0" ng-repeat="task in tasks | orderBy: priority">
+              <tr ng-if="tasks.length > 0" ng-repeat="task in tasks">
                 <td>{{ task.assignee }}</td>
                 <td>{{ task.name }}</td>
                 <td>{{ task.due_date }}</td>
@@ -53,25 +53,34 @@
         <form name="taskForm" novalidate>          
           <div class="form-group">
             <label>Task Title</label>
-            <input ng-model="task.name" class="form-control" placeholder="Enter your Task Name" required>
+            <input ng-model="task.name" value="{{ selectedTask ? selectedTask.name : '' }}" class="form-control" placeholder="Enter your Task Name" required>
           </div>
           <div class="form-group">
             <label>Task Description</label>
-            <textarea ng-model="task.description" class="form-control" rows="3" placeholder="Please briefly describe your Task needs to accomoplish...." required></textarea>
+            <textarea ng-model="task.description" value="{{selectedTask ? selectedTask.description : ''}}" class="form-control" rows="3" placeholder="Please briefly describe your Task needs to accomoplish...." required></textarea>
           </div>
           <div class="form-group">
           	<label>Assignee</label>
-          	<input ng-model="task.assignee" class="form-control" placeholder="Who would you like to assign this Task to? (Name or Email)">
+          	<input ng-model="task.assignee" value="selectedTask ? selectedTask.assignee : ''" class="form-control" placeholder="Who would you like to assign this Task to? (Name or Email)">
           </div> 
           <div class="form-group">
             <label>Task due date:</label>
             <div class='input-group date' id='datetimepicker'>              
-              <input ng-model="task.dueDate" type='text' class="form-control" datepicker-popup="{{format}}" is-open="opened" datepicker-options="dateOptions" />
+              <input ng-model="task.dueDate" type='text' value="selectedTask ? selectedTask.due_date : ''" class="form-control" datepicker-popup="{{format}}" is-open="opened" datepicker-options="dateOptions" />
               <span class="input-group-addon"><span class="fa fa-calendar"></span></span>              
             </div>
-          </div>                
-          <button type="submit" class="btn btn-large btn-primary" ng-disabled="taskForm.$invalid" ng-click="submitTaskForm(task); showTaskForm=false; showTaskList=true;"><i class="fa fa-floppy-o"></i> Create New Task</button>
-          <button type="submit" class="btn btn-large btn-danger" ng-click="showTaskForm=false; showTaskList=true;"><i class="fa fa-times"></i> Cancel</button>  
+          </div>  
+
+          <div ng-hide="editedTask">              
+            <button type="submit" class="btn btn-large btn-primary" ng-disabled="taskForm.$invalid" ng-click="submitTaskForm(task); showTaskForm=false; showTaskList=true;"><i class="fa fa-floppy-o"></i> Create New Task</button>
+            <button type="submit" class="btn btn-large btn-danger" ng-click="showTaskForm=false; showTaskList=true;"><i class="fa fa-times"></i> Cancel</button>  
+          </div>
+
+          <div ng-show="editedTask">              
+            <button type="submit" class="btn btn-large btn-primary" ng-disabled="taskForm.$invalid" ng-click="submitEdited(task); showTaskForm=false; showTaskList=true;"><i class="fa fa-floppy-o"></i> Save Changes</button>
+            <button ng-click="deleteEvent(event)" type="submit" class="btn btn-large btn-success" value="Delete"><i class="fa fa-times"></i> Delete Task</button>
+            <button type="submit" class="btn btn-large btn-danger" ng-click="showTaskForm=false; showTaskList=true; selectedTask=undefined;"><i class="fa fa-times"></i> Cancel</button>  
+          </div>
         </form>       
       </div>
     </div>

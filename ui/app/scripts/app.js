@@ -28,4 +28,3 @@ app.config(function ($routeProvider) {
       });
   });
 
-
