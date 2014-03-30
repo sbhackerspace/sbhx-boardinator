@@ -30,7 +30,7 @@ type Email struct {
 	Id      string   `json:"id"`
 	To      []string `json:"to"`
 	From    string   `json:"from"`
-	Subject string   `json:"name"`
+	Subject string   `json:"subject"`
 	Body    string   `json:"body"`
 
 	Status EmailStatus `json:"status"`

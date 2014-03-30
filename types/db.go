@@ -12,14 +12,14 @@ import (
 )
 
 var (
-	once sync.Once
-	db   *sql.DB
+	pgOnce sync.Once
+	db     *sql.DB
 
 	postgresConnStr = "user=boardinator dbname=boardinator host=localhost sslmode=disable password=boardinator"
 )
 
 func init() {
-	once.Do(initPostgres)
+	pgOnce.Do(initPostgres)
 }
 
 func initPostgres() {
