@@ -70,7 +70,9 @@
               <span class="input-group-addon"><span class="fa fa-calendar"></span></span>              
             </div>
           </div>  
-
+          <div ng-show="editedTask" style="display:none!important;">
+            <input ng-model="task.id" value="selectedTask ? selectedTask.id : ''">
+          </div>
           <div ng-hide="editedTask">              
             <button type="submit" class="btn btn-large btn-primary" ng-disabled="taskForm.$invalid" ng-click="submitTaskForm(task); showTaskForm=false; showTaskList=true;"><i class="fa fa-floppy-o"></i> Create New Task</button>
             <button type="submit" class="btn btn-large btn-danger" ng-click="showTaskForm=false; showTaskList=true;"><i class="fa fa-times"></i> Cancel</button>  
@@ -78,7 +80,7 @@
 
           <div ng-show="editedTask">              
             <button type="submit" class="btn btn-large btn-primary" ng-disabled="taskForm.$invalid" ng-click="submitEdited(task); showTaskForm=false; showTaskList=true;"><i class="fa fa-floppy-o"></i> Save Changes</button>
-            <button ng-click="deleteEvent(event)" type="submit" class="btn btn-large btn-success" value="Delete"><i class="fa fa-times"></i> Delete Task</button>
+            <button type= "submit"  ng-click="deleteTask(task)" class="btn btn-large btn-success"><i class="fa fa-times"></i> Delete Task</button>
             <button type="submit" class="btn btn-large btn-danger" ng-click="showTaskForm=false; showTaskList=true; selectedTask=undefined;"><i class="fa fa-times"></i> Cancel</button>  
           </div>
         </form>       

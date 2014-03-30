@@ -30,7 +30,7 @@ app.controller('TasksCtrl', ['$scope', '$http', '$filter', function ($scope, $ht
             name: formData.name,
             description: formData.description.replace(/\n/g, " "),            
             assignee: formData.assignee,
-            due_date: formData.dueDate,
+            due_date: formData.dueDate
         };
                 
         $http.post('/api/tasks', params)
@@ -49,10 +49,10 @@ app.controller('TasksCtrl', ['$scope', '$http', '$filter', function ($scope, $ht
             })                         
     };
 
-    $scope.editTask = function (task) {                
+    $scope.editTask = function(task) {                
         $scope.selectedTask = task;        
-        $scope.task = {};
-        console.log(task);
+        $scope.task = {};                                
+        $scope.task.id = task.id;        
         $scope.task.name = task.name;
         $scope.task.description = task.description;
         $scope.task.assignee = task.assignee;  
@@ -61,13 +61,38 @@ app.controller('TasksCtrl', ['$scope', '$http', '$filter', function ($scope, $ht
         $scope.showTaskForm = true;
         $scope.editedTask = true;
 
-        $scope.submitEdited = function(task) {
-            console.log(task);
+        $scope.submitEdited = function(task) {                        
+            var data = {
+                name: task.name,
+                description: task.description.replace(/\n/g, " "),         
+                assignee: task.assignee,
+                due_date: '2014-03-04T00:00:00-08:00'
+            }
+            var taskId = task.id;
+            var url = '/api/tasks/' + taskId;
+            
+            $http.put(url, data)
+                .then(function(e) { 
+                    if(e) {
+                        console.log("Updated Successfully!")
+                    }
+                })
+        }; 
 
-        };        
+        $scope.deleteTask = function(task) {
+            var taskId = task.id; 
+            var url = '/api/tasks/' + taskId;           
+            $http.delete(url, {})
+                .then(function(e) {
+                    if (e) {
+                        $scope.tasks.splice($scope.tasks.indexOf(task), 1);
+                        $scope.showTaskForm = false;
+                        $scope.showTaskList = true;
+                    }                                      
+                })                                
+        }       
 
-    };
-   
+    }; 
     $scope.dateOptions = {
         'year-format': "'yyyy'",
         'starting-day': 1
