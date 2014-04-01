@@ -3,7 +3,6 @@
 package main
 
 import (
-	"./types"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -14,6 +13,8 @@ import (
 	"net/http"
 	"runtime"
 	"time"
+
+	"github.com/sbhackerspace/sbhx-boardinator/types"
 )
 
 var (
