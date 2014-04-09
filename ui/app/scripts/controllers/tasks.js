@@ -3,14 +3,16 @@
 app.controller('TasksCtrl', ['$scope', '$http', '$filter', function ($scope, $http, $filter) {
 
     $scope.tasks = [];
+    var dateFilter = $filter('date');
+
     $scope.loadTasks = function() {
         var data = {};
         $http.get('/api/tasks', data)
             .then(function(e) {
                 if(e.status === 200) {
-                    var p,
-                        dateFilter = $filter('date'),
+                    var p,                                            
                         tasks = e.data;                        
+
                     for (var i=0; i<tasks.length; i++) {
                         var task = tasks[i];
                         for (p in task) {
@@ -24,8 +26,7 @@ app.controller('TasksCtrl', ['$scope', '$http', '$filter', function ($scope, $ht
             })
     };
     
-    $scope.submitTaskForm = function(formData) {         
-                                    
+    $scope.submitTaskForm = function(formData) {      
         var params = {            
             name: formData.name,
             description: formData.description.replace(/\n/g, " "),            
@@ -36,9 +37,9 @@ app.controller('TasksCtrl', ['$scope', '$http', '$filter', function ($scope, $ht
         $http.post('/api/tasks', params)
             .then(function(e) {
                 if(e.status === 200) {
-                    var p,
-                        dateFilter = $filter('date'),                    
+                    var p,                                        
                         task = e.data;                                        
+
                     for (p in task) {
                         if (p === 'due_date') {
                             task['due_date'] = dateFilter(task.due_date, 'yyyy/MM/dd');
@@ -61,12 +62,16 @@ app.controller('TasksCtrl', ['$scope', '$http', '$filter', function ($scope, $ht
         $scope.showTaskForm = true;
         $scope.editedTask = true;
 
-        $scope.submitEdited = function(task) {                        
+        $scope.submitEdited = function(task) {     
+            
+        console.log(task)                  
+        var date = new Date(task.dueDate)         
+        console.log(date);
             var data = {
                 name: task.name,
                 description: task.description.replace(/\n/g, " "),         
                 assignee: task.assignee,
-                due_date: '2014-03-04T00:00:00-08:00'
+                due_date: date 
             }
             var taskId = task.id;
             var url = '/api/tasks/' + taskId;
