@@ -80,7 +80,7 @@
 
           <div ng-show="editedTask">              
             <button type="submit" class="btn btn-large btn-primary" ng-disabled="taskForm.$invalid" ng-click="submitEdited(task); showTaskForm=false; showTaskList=true;"><i class="fa fa-floppy-o"></i> Save Changes</button>
-            <button type= "submit"  ng-click="deleteTask(task)" class="btn btn-large btn-success"><i class="fa fa-times"></i> Delete Task</button>
+            <button type="submit" ng-click="deleteTask(task)" class="btn btn-large btn-success"><i class="fa fa-times"></i> Delete Task</button>
             <button type="submit" class="btn btn-large btn-danger" ng-click="showTaskForm=false; showTaskList=true; selectedTask=undefined;"><i class="fa fa-times"></i> Cancel</button>  
           </div>
         </form>       
