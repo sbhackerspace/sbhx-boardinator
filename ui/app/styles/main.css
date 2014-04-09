@@ -71,10 +71,16 @@ body {
   margin-top: 28px;
 }
 
+.no-task-message {
+  text-align: center;
+  color: rgb(225, 45, 45);
+  font-size: 16px;
+}
+
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {  
   #wrapper {
-    padding-left: 225px;
+    padding-left: 210px;
   }
   #page-wrapper {
     padding: 15px 25px;
@@ -97,7 +103,7 @@ body {
   .side-nav {
     margin-left: -225px;
     left: 225px;
-    width: 225px;
+    width: 200px;
     position: fixed;
     top: 50px;
     height: 100%;

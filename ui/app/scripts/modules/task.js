@@ -41,14 +41,13 @@
                         name: params.name,
                         description: params.description.replace(/\n/g, " "),
                         assignee: params.assignee,
-                        due_date: params.dueDate
+                        due_date: params.due_date
                     };
 
                     $http.post('/api/tasks', data).then(function(e) {
                         if(e.status === 200) {
                             var p,
-                                task = e.data;
-
+                                task = e.data;                            
                             for (p in task) {
                                 if (p === 'due_date') {
                                     task['due_date'] = dateFilter(task.due_date, 'yyyy/MM/dd');
@@ -62,7 +61,7 @@
 
                 var editTask = function(params) {
                     var url = '/api/tasks/' + params.id,                        
-                        date = new Date(params.dudDate),
+                        date = new Date(params.due_date),
                         deferred = $q.defer();
                     
                     var data = {
@@ -76,7 +75,7 @@
                         if(e.status === 200) {
                             var p,
                                 editedTask = e.data;
-
+                                                    
                             for (p in editedTask) {
                                 if (p === 'due_date') {
                                     editedTask['due_date'] = dateFilter(editedTask.due_date, 'yyyy/MM/dd');

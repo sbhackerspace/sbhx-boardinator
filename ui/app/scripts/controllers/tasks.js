@@ -17,26 +17,24 @@ app.controller('TasksCtrl',
         };
         
         $scope.submitTaskForm = function(formData) {                           
-            taskService.createNewTask(formData).then(function(task) {
-                $scope.tasks.push(task);
+            taskService.createNewTask(formData).then(function(task) {                
+                $scope.task = task;
+                $scope.tasks.push(task);                
             })
         };
 
-        $scope.editTask = function(task) {                      
-            $scope.selectedTask = task;                                            
-            $scope.task.id = task.id;        
-            $scope.task.name = task.name;
-            $scope.task.description = task.description;
-            $scope.task.assignee = task.assignee;  
-            $scope.task.dueDate  = task.due_date;            
+        $scope.editTask = function(selectedTask) {                                         
+            $scope.task = selectedTask;                                     
             $scope.showTaskList = false;
             $scope.showTaskForm = true;
             $scope.editedTask = true;
 
             $scope.submitEdited = function(task) {     
-                taskService.editTask(task).then(function(editedTask) {
-                    $scope.selectedTask = editedTask;
-                    $scope.$apply();
+                taskService.editTask(task).then(function(editedTask) {    
+                       // console.log(editedTask);
+                       // $scope.tasks.splice($scope.tasks.indexOf(editedTask), 0);          
+                    $scope.task.due_date= editedTask.due_date;
+
                 })                        
             }; 
 
