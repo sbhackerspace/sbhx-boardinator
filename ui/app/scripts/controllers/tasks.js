@@ -1,108 +1,61 @@
 'use strict';
 
-app.controller('TasksCtrl', ['$scope', '$http', '$filter', function ($scope, $http, $filter) {
+app.controller('TasksCtrl', 
 
-    $scope.tasks = [];
-    var dateFilter = $filter('date');
+    ['$scope', '$http', '$filter', 'taskService',
 
-    $scope.loadTasks = function() {
-        var data = {};
-        $http.get('/api/tasks', data)
-            .then(function(e) {
-                if(e.status === 200) {
-                    var p,                                            
-                        tasks = e.data;                        
+    function ($scope, $http, $filter, taskService) {
 
-                    for (var i=0; i<tasks.length; i++) {
-                        var task = tasks[i];
-                        for (p in task) {
-                            if (p === 'due_date') {
-                                task['due_date'] = dateFilter(task.due_date, 'yyyy/MM/dd');
-                            }
-                        }
-                    }
-                    $scope.tasks = tasks;
-                }
+        $scope.tasks = [];
+        $scope.task = {};      
+        var dateFilter = $filter('date');        
+       
+        $scope.loadTasks = function() {           
+            taskService.getTasks().then(function(tasks) {
+                $scope.tasks = tasks;               
             })
-    };
-    
-    $scope.submitTaskForm = function(formData) {      
-        var params = {            
-            name: formData.name,
-            description: formData.description.replace(/\n/g, " "),            
-            assignee: formData.assignee,
-            due_date: formData.dueDate
         };
-                
-        $http.post('/api/tasks', params)
-            .then(function(e) {
-                if(e.status === 200) {
-                    var p,                                        
-                        task = e.data;                                        
+        
+        $scope.submitTaskForm = function(formData) {                           
+            taskService.createNewTask(formData).then(function(task) {
+                $scope.tasks.push(task);
+            })
+        };
 
-                    for (p in task) {
-                        if (p === 'due_date') {
-                            task['due_date'] = dateFilter(task.due_date, 'yyyy/MM/dd');
-                        }                            
-                    }                                                                                  
-                    $scope.tasks.push(task);
-                }                            
-            })                         
-    };
+        $scope.editTask = function(task) {                      
+            $scope.selectedTask = task;                                            
+            $scope.task.id = task.id;        
+            $scope.task.name = task.name;
+            $scope.task.description = task.description;
+            $scope.task.assignee = task.assignee;  
+            $scope.task.dueDate  = task.due_date;            
+            $scope.showTaskList = false;
+            $scope.showTaskForm = true;
+            $scope.editedTask = true;
 
-    $scope.editTask = function(task) {                
-        $scope.selectedTask = task;        
-        $scope.task = {};                                
-        $scope.task.id = task.id;        
-        $scope.task.name = task.name;
-        $scope.task.description = task.description;
-        $scope.task.assignee = task.assignee;  
-        $scope.task.dueDate  = task.due_date;            
-        $scope.showTaskList = false;
-        $scope.showTaskForm = true;
-        $scope.editedTask = true;
+            $scope.submitEdited = function(task) {     
+                taskService.editTask(task).then(function(editedTask) {
+                    $scope.selectedTask = editedTask;
+                    $scope.$apply();
+                })                        
+            }; 
 
-        $scope.submitEdited = function(task) {     
-            
-        console.log(task)                  
-        var date = new Date(task.dueDate)         
-        console.log(date);
-            var data = {
-                name: task.name,
-                description: task.description.replace(/\n/g, " "),         
-                assignee: task.assignee,
-                due_date: date 
-            }
-            var taskId = task.id;
-            var url = '/api/tasks/' + taskId;
-            
-            $http.put(url, data)
-                .then(function(e) { 
-                    if(e) {
-                        console.log("Updated Successfully!")
-                    }
-                })
-        }; 
-
-        $scope.deleteTask = function(task) {
-            var taskId = task.id; 
-            var url = '/api/tasks/' + taskId;           
-            $http.delete(url, {})
-                .then(function(e) {
-                    if (e) {
+            $scope.deleteTask = function(task) {                       
+                taskService.deleteTask(task).then(function(response) {
+                    if(response.indexOf('Task deleted successfully!') !== -1) {
                         $scope.tasks.splice($scope.tasks.indexOf(task), 1);
                         $scope.showTaskForm = false;
                         $scope.showTaskList = true;
-                    }                                      
-                })                                
-        }       
+                    }
+                })
+            };       
 
-    }; 
-    $scope.dateOptions = {
-        'year-format': "'yyyy'",
-        'starting-day': 1
-    };    
-    $scope.formats = ['MM/dd/yyyy', 'yyyy/MM/dd', 'shortDate'];
-    $scope.format = $scope.formats[1];
+        }; 
+        $scope.dateOptions = {
+            'year-format': "'yyyy'",
+            'starting-day': 1
+        };    
+        $scope.formats = ['MM/dd/yyyy', 'yyyy/MM/dd', 'shortDate'];
+        $scope.format = $scope.formats[1];
 
   }]);

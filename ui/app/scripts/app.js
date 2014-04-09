@@ -5,7 +5,8 @@ var app = angular.module('uiApp', [
   'ngResource',
   'ngSanitize',
   'ngRoute',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'taskModule'
 ]);
 
 
