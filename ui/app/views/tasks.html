@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-lg-12">
     <h1>Task Management<small> Overview</small></h1>
-    <button type="submit" class="btn btn-large btn-primary float-right" ng-init="loadTasks(); showTaskList=true; showTaskfrom=false;" ng-click="task={}; showTaskForm=true; showTaskList=false; editedTask=false;"><i class="fa fa-pencil"></i> Create a New Task</button>
+    <button type="submit" class="btn btn-large btn-primary float-right" ng-init="loadTasks(); showTaskList=true; showCompletedTaskList = true; showTaskfrom=false;" ng-click="task={}; showTaskForm=true; showTaskList=false; editedTask=false; showCompletedTaskList=false;"><i class="fa fa-pencil"></i> Create a New Task</button>
     <ol class="breadcrumb">
       <li class="active"><i class="fa fa-calendar"></i> This is the place to Manage & Assign Tasks</li>
     </ol>    
@@ -19,24 +19,26 @@
         <div class="table-responsive">
           <table class="table table-bordered table-hover table-striped tablesorter">
             <thead>
-              <tr>
-                <th>Assignee <i class="fa fa-sort"></i></th>
+              <tr>  
+                <th>Status</th>              
                 <th>Title</th>
                 <th>Due Date <i class="fa fa-calendar-o"></i></th>
+                <th>Assignee <i class="fa fa-sort"></i></th>
                 <th>Task Description <i class="fa fa-book"></i></th>                
                 <th>Edit <i class="fa fa-pencil-square-o"></i></th>
               </tr>
             </thead>
             <tbody>
-              <tr ng-if="tasks.length > 0" ng-repeat="task in tasks">
-                <td>{{ task.assignee }}</td>
-                <td>{{ task.name }}</td>
-                <td>{{ task.due_date }}</td>
-                <td>{{ task.description }}</td>                
-                <td><a ng-click="editTask(task);">Edit <i class="fa fa-pencil-square-o"></i></td>
+              <tr ng-if="tasks.length > 0" ng-repeat="task in tasks"> 
+                <td><input type="checkbox" ng-model="task.completed" ng-click="complete(task)"></td>
+                <td class="done-{{task.completed}}">{{ task.name }}</td>
+                <td class="done-{{task.completed}}">{{ task.due_date }}</td>
+                <td class="done-{{task.completed}}">{{ task.assignee }}</td>
+                <td class="done-{{task.completed}}">{{ task.description }}</td>                
+                <td class="done-{{task.completed}}"><a ng-click="editTask(task);">Edit <i class="fa fa-pencil-square-o"></i></td>
               </tr>
               <tr ng-if="tasks.length===0" class="no-task-message">
-                <td colspan="6">You currently don't have any assigned Tasks!</td>
+                <td colspan="7">You currently don't have any assigned Tasks!</td>
               </tr>           
             </tbody>
           </table>
@@ -74,18 +76,37 @@
             <input ng-model="task.id">
           </div>
           <div ng-hide="editedTask">              
-            <button type="submit" class="btn btn-large btn-primary" ng-disabled="taskForm.$invalid" ng-click="submitTaskForm(task); showTaskForm=false; showTaskList=true;"><i class="fa fa-floppy-o"></i> Create New Task</button>
-            <button type="submit" class="btn btn-large btn-danger" ng-click="showTaskForm=false; showTaskList=true;"><i class="fa fa-times"></i> Cancel</button>  
+            <button type="submit" class="btn btn-large btn-primary" ng-disabled="taskForm.$invalid" ng-click="submitTaskForm(task); showTaskForm=false;showTaskList=true;showCompletedTaskList=false;"><i class="fa fa-floppy-o"></i> Create New Task</button>
+            <button type="submit" class="btn btn-large btn-danger" ng-click="showTaskForm=false; showTaskList=true; showCompletedTaskList = true;"><i class="fa fa-times"></i> Cancel</button>  
           </div>
 
           <div ng-show="editedTask">              
             <button type="submit" class="btn btn-large btn-primary" ng-disabled="taskForm.$invalid" ng-click="submitEdited(task);showTaskForm=false;showTaskList=true;"><i class="fa fa-floppy-o"></i> Save Changes</button>
             <button type="submit" ng-click="deleteTask(task)" class="btn btn-large btn-success"><i class="fa fa-times"></i> Delete Task</button>
-            <button type="submit" class="btn btn-large btn-danger" ng-click="showTaskForm=false; showTaskList=true;"><i class="fa fa-times"></i> Cancel</button>  
+            <button type="submit" class="btn btn-large btn-danger" ng-click="showTaskForm=false; showTaskList=true; showCompletedTaskList=true;"><i class="fa fa-times"></i> Cancel</button>  
           </div>
         </form>       
       </div>
     </div>
   </div>           
+</div>
+
+<div class="row" ng-show="showCompletedTaskList"> 
+  <div class="col-lg-12">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-clock-o"></i> Recent Completed Tasks:</h3>
+      </div>
+      <div class="panel-body">
+        <div class="list-group">         
+          <a href="#" class="list-group-item">
+            <span class="badge">{{ completedTask.completion_data}}</span>            
+            <i class="fa fa-check"></i> 
+            Completed task {{ name.Task }}            
+          </a>         
+        </div>        
+      </div>
+    </div>
+  </div>
 </div>
 

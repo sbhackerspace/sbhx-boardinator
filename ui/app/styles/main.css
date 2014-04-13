@@ -3,6 +3,7 @@
 .margin-top-50 { margin-top: 50px; }
 .float-right { float: right; }
 
+
 /* Space out content a bit */
 body {
   padding-top: 20px;
@@ -22,6 +23,11 @@ body {
 .footer {
   padding-left: 15px;
   padding-right: 15px;
+}
+
+.done-true {
+  text-decoration: line-through;
+  color: grey;
 }
 
 /* Custom page header */

@@ -68,7 +68,8 @@
                         name: params.name,
                         description: params.description.replace(/\n/g, " "),
                         assignee: params.assignee,
-                        due_date: date
+                        due_date: date,
+                        completed: params.completed
                     };
 
                     $http.put(url, data).then(function(e) {
