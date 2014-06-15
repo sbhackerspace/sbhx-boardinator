@@ -81,10 +81,10 @@ or
 
 ### Use Bower to install your App Dependencies:
 
-Once yeoman is installed, cd into the ui directory & type (for current
-application dependencies):
+Once yeoman is installed...
 
-`bower install` 
+    cd ui/
+    bower install
 
 
 ## Run the App
@@ -96,6 +96,6 @@ When bower install is completed, simply type:
 and that will start your Angular Application on localhost!  More
 likely you will want to run the backend.  To do so, type
 
-`go run boardinator.go`
+    MANDRILL_KEY="(put it here)" go run boardinator.go
 
 then visit <http://localhost:6060/>.
