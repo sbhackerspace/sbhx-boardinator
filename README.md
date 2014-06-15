@@ -72,11 +72,11 @@ or simply
 
 Visit http://yeoman.io/ for detailed documentation:
 
-`npm install -g yo`
+    npm install -g yo
 
 or
 
-`sudo npm install -g yo`
+    sudo npm install -g yo
 
 
 ### Use Bower to install your App Dependencies:
@@ -91,7 +91,7 @@ application dependencies):
 
 When bower install is completed, simply type:
 
-`grunt serve`
+    grunt serve
 
 and that will start your Angular Application on localhost!  More
 likely you will want to run the backend.  To do so, type
