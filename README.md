@@ -46,6 +46,9 @@ http://localhost:6060/api/tasks
 
 ### Update Task
 
+TODO: PUT should include the full Task, and the PATCH HTTP verb should
+be used for partial updates such as this one:
+
 `curl -X PUT -d '{"completed":true}' http://localhost:6060/api/tasks/49ebc56f-dfdb-4a11-4d9c-d83d488f987a`
 
 
