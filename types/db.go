@@ -29,13 +29,19 @@ func initPostgres() {
 		log.Fatal(err)
 	}
 
+	err = db.Ping()
+	if err != nil {
+		log.Fatalf("DB ping failed with error `%v`. Connection string: `%v`",
+			err, postgresConnStr)
+	}
+
 	// Create `tasks`
 	_, err = db.Query(createTableTasks)
 	if err != nil {
 		log.Printf("Error creating tasks table: %v\n", err)
 	}
 
-	log.Println("Connected to Postgres (maybe)")
+	log.Println("Connected to Postgres")
 }
 
 var createTableTasks = `CREATE TABLE tasks (
