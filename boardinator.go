@@ -3,11 +3,9 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"html/template"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"runtime"
@@ -147,21 +145,14 @@ func GetTasks(w http.ResponseWriter, r *http.Request) {
 // CreateTask receives a Task in the form of a JSON POST and saves
 // (new) Task to the DB
 func CreateTask(w http.ResponseWriter, r *http.Request) {
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		writeError(w, err, 500)
-		return
-	}
-	defer r.Body.Close()
-
 	t := &types.Task{}
-	if err := json.Unmarshal(body, t); err != nil {
+	if err := help.ReadInto(r.Body, t); err != nil {
 		writeError(w, err, 500)
 		return
 	}
 
 	// Save to DB
-	if err = t.Save(); err != nil {
+	if err := t.Save(); err != nil {
 		writeError(w, err, 500)
 		return
 	}
@@ -190,22 +181,13 @@ func GetTask(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateTask(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
-	id := params["id"]
-
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		writeError(w, err, 500)
-		return
-	}
-	defer r.Body.Close()
-
-	// Get the data to use
 	t := &types.Task{}
-	if err := json.Unmarshal(body, t); err != nil {
+	if err := help.ReadInto(r.Body, t); err != nil {
 		writeError(w, err, 500)
 		return
 	}
+
+	id := mux.Vars(r)["id"]
 
 	// Get corresponding Task to update
 	task, err := types.UpdateTask(id, t)
