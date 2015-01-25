@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/gorilla/mux"
 	"html/template"
 	"io/ioutil"
 	"log"
@@ -14,6 +13,9 @@ import (
 	"runtime"
 	"time"
 
+	"github.com/222Labs/help"
+	"github.com/gorilla/mux"
+	"github.com/sbhackerspace/sbhx-boardinator/helpers"
 	"github.com/sbhackerspace/sbhx-boardinator/types"
 )
 
@@ -139,14 +141,7 @@ func GetTasks(w http.ResponseWriter, r *http.Request) {
 		writeError(w, err, 500)
 		return
 	}
-	// Marshall all Tasks to JSON
-	jsonData, err := json.Marshal(tasks)
-	if err != nil {
-		writeError(w, err, 500)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.Write(jsonData)
+	helpers.WriteJSON(w, tasks)
 }
 
 // CreateTask receives a Task in the form of a JSON POST and saves
@@ -171,16 +166,7 @@ func CreateTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Marshal to JSON and return to user
-	jsonData, err := json.Marshal(t)
-	if err != nil {
-		writeError(w, err, 500)
-		return
-	}
-
-	// Write newly-created Task back to user as JSON
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.Write(jsonData)
+	helpers.WriteJSON(w, t)
 }
 
 // GetTask response to a GET request at the URL:
@@ -200,14 +186,7 @@ func GetTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Marshall Task to JSON
-	jsonData, err := json.Marshal(t)
-	if err != nil {
-		writeError(w, err, 500)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.Write(jsonData)
+	helpers.WriteJSON(w, t)
 }
 
 func UpdateTask(w http.ResponseWriter, r *http.Request) {
@@ -235,15 +214,7 @@ func UpdateTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Marshal to JSON and return to user
-	jsonData, err := json.Marshal(task)
-	if err != nil {
-		writeError(w, err, 500)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.Write(jsonData)
+	helpers.WriteJSON(w, task)
 }
 
 // DeleteTask response to a DELETE request at the URL:
@@ -265,15 +236,8 @@ func DeleteTask(w http.ResponseWriter, r *http.Request) {
 
 // SendEmail POST Handler
 func SendEmail(w http.ResponseWriter, r *http.Request) {
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		writeError(w, err, 500)
-		return
-	}
-	defer r.Body.Close()
-
 	e := &types.Email{}
-	if err = json.Unmarshal(body, e); err != nil {
+	if err := help.ReadInto(r.Body, e); err != nil {
 		writeError(w, err, 500)
 		return
 	}
