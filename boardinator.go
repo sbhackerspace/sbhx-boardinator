@@ -164,8 +164,7 @@ func CreateTask(w http.ResponseWriter, r *http.Request) {
 // "/api/tasks/{id:[0-9a-f-]+}" It takes that id and responds with the
 // corresponding Task
 func GetTask(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
-	id := params["id"]
+	id := mux.Vars(r)["id"]
 
 	t, err := types.GetTask(id)
 	if err != nil {
@@ -203,8 +202,7 @@ func UpdateTask(w http.ResponseWriter, r *http.Request) {
 // "/api/tasks/{id:[0-9a-f-]+}" It takes that id and deletes the
 // corresponding Task
 func DeleteTask(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
-	id := params["id"]
+	id := mux.Vars(r)["id"]
 
 	err := types.DeleteTask(id)
 	if err != nil {
