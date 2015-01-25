@@ -57,7 +57,7 @@ func (t *Task) Save() error {
 		return fmt.Errorf("Error saving Task: %v", err)
 	}
 
-	log.Printf("New *Task created: %+v\n", t)
+	log.Printf("New Task created: %+v\n", t)
 	return nil
 }
 
@@ -77,7 +77,12 @@ func (t *Task) addTimestamps() {
 func (t *Task) Update() error {
 	_, err := db.Query(`UPDATE tasks SET (Name, Description, DueDate, Assignee, Completed, CompletionDate) =
         ($1, $2, $3, $4, $5, $6) WHERE Id = $7`, t.updateFields()...)
-	return err
+	if err != nil {
+		log.Printf("Task update failed `%+v` -- %v\n", t, err)
+		return err
+	}
+	log.Printf("Task updated: %+v\n", t)
+	return nil
 }
 
 func (t *Task) insertFields() []interface{} {
@@ -119,6 +124,7 @@ func AllTasks() ([]*Task, error) {
 		tasks = append(tasks, t)
 	}
 
+	log.Println("All tasks retrieved")
 	return tasks, nil
 }
 
@@ -129,6 +135,7 @@ func GetTask(idStr string) (*Task, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Task not found: %v", err)
 	}
+	log.Printf("Task retrieved: %+v\n", t)
 	return t, nil
 }
 
@@ -181,5 +188,6 @@ func DeleteTask(idStr string) error {
 	if affected == 0 {
 		return ErrTaskNotFound
 	}
+	log.Printf("Task %v deleted\n", idStr)
 	return nil
 }
