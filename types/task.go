@@ -5,10 +5,10 @@ package types
 import (
 	"errors"
 	"fmt"
-	uuid "github.com/nu7hatch/gouuid"
 	"log"
 	"time"
 
+	uuid "github.com/nu7hatch/gouuid"
 	"github.com/sbhackerspace/sbhx-boardinator/helpers"
 )
 
@@ -30,9 +30,9 @@ type Task struct {
 
 	// TODO: Use these fields
 
-	CreatedBy   *User      `json:"created_by"`
-	AssignedTo  *User      `json:"assigned_to"`
-	Parent      *Task      `json:"parent"`
+	CreatedBy  *User `json:"created_by"`
+	AssignedTo *User `json:"assigned_to"`
+	Parent     *Task `json:"parent"`
 
 	CreatedAt  *time.Time `json:"created_at"`
 	ModifiedAt *time.Time `json:"modified_at"`
