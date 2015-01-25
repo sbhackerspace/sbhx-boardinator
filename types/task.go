@@ -124,7 +124,7 @@ func AllTasks() ([]*Task, error) {
 		tasks = append(tasks, t)
 	}
 
-	log.Println("All tasks retrieved")
+	log.Printf("All %v Tasks retrieved", len(tasks))
 	return tasks, nil
 }
 
